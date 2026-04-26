@@ -1,5 +1,5 @@
 async function sabresIsPlaying() {
-    const res = await fetch("https://api-web.nhle.com/v1/score/now");
+    const res = await fetch("https://corsproxy.io/?url=https://api-web.nhle.com/v1/score/now");
     const data = await res.json();
 
     const gameFound = data.games.find(game =>
