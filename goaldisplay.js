@@ -3,8 +3,8 @@ async function sabresIsPlaying() {
     const data = await res.json();
 
     const gameFound = data.games.find(game =>
-      game.homeTeam.abbrev === "MIN" ||
-      game.awayTeam.abbrev === "MIN"
+      game.homeTeam.abbrev === "PIT" ||
+      game.awayTeam.abbrev === "PIT"
     );
   
     const gameView = document.getElementById("gameView");
