@@ -35,7 +35,7 @@ async function checkForGoal() {
     const myTeam = game.homeTeam.abbrev === "COL" ? game.homeTeam : game.awayTeam;
 
     if (myTeam.score > myTeamScore) {
-        const audio = new Audio("goal.mp3");
+        const audio = new Audio("sabres_goalhorn.mp3");
         audio.play();
     }
 
