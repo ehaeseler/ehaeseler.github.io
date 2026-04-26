@@ -3,6 +3,7 @@ let myTeamScore = null;
 document.getElementById("enableSound").addEventListener("click", () => {
     const audio = new Audio("sabres_goalhorn.mp3");
     audio.play();
+    audio.pause();
     audio.currentTime = 0;
     document.getElementById("enableSound").style.display = "none";
 });
