@@ -7,8 +7,8 @@ async function sabresIsPlaying() {
     for (const day of data.gamesByDate) {
       for (const game of day.games) {
         if (
-          game.homeTeam.abbrev === "BUF" ||
-          game.awayTeam.abbrev === "BUF"
+          game.homeTeam.abbrev === "MIN" ||
+          game.awayTeam.abbrev === "MIN"
         ) {
           gameFound = game;
           break;
