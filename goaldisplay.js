@@ -32,3 +32,5 @@ async function sabresIsPlaying() {
     document.getElementById("team1Score").textContent = gameFound.homeTeam.score;
     document.getElementById("team2Score").textContent = gameFound.awayTeam.score;
   }
+
+  sabresIsPlaying();
