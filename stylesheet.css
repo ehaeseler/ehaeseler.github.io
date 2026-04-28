@@ -1,0 +1,17 @@
+.box {
+    width: 300px;
+    height: 300px;
+    border: 1px solid black;
+}
+
+body {
+    font-size: xx-large;
+    background-color: #003087;
+}
+
+#gameView {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
