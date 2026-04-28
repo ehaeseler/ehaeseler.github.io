@@ -50,10 +50,10 @@ function updateUI(game) {
     document.getElementById("noGameView").style.display = "none";
     document.getElementById("gameView").style.display = "block";
     document.getElementById("team1Logo").src = myTeam.logo;
-    document.getElementById("team1Name").textContent = myTeam.name.default;
+    // document.getElementById("team1Name").textContent = myTeam.name.default;
     document.getElementById("team1Score").textContent = myTeam.score;
     document.getElementById("team2Logo").src = otherTeam.logo;
-    document.getElementById("team2Name").textContent = otherTeam.name.default;
+    // document.getElementById("team2Name").textContent = otherTeam.name.default;
     document.getElementById("team2Score").textContent = otherTeam.score;
 }
 
