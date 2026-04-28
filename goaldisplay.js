@@ -34,10 +34,11 @@ async function checkForGoal() {
     if (!game) return;
     const myTeam = game.homeTeam.abbrev === "BUF" ? game.homeTeam : game.awayTeam;
 
-    if (myTeam.score > myTeamScore) {
+    setTimeout(() => {
         const audio = new Audio("sabres_goalhorn.mp3");
         audio.play();
-    }
+        updateUI(game);
+    }, 45000);
 
     myTeamScore = myTeam.score;
     updateUI(game);
@@ -58,4 +59,4 @@ function updateUI(game) {
 }
 
 init();
-setInterval(checkForGoal, 30000);
+setInterval(checkForGoal, 1000);
