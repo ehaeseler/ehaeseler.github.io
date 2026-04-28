@@ -1,4 +1,5 @@
 let myTeamScore = null;
+let goalPending = false;
 
 // document.getElementById("enableSound").addEventListener("click", () => {
 //     const audio = new Audio("sabres_goalhorn.mp3");
@@ -34,14 +35,19 @@ async function checkForGoal() {
     if (!game) return;
     const myTeam = game.homeTeam.abbrev === "BUF" ? game.homeTeam : game.awayTeam;
 
-    setTimeout(() => {
-        const audio = new Audio("sabres_goalhorn.mp3");
-        audio.play();
+    if (myTeam.score > myTeamScore && !goalPending) {
+        goalPending = true;
+        myTeamScore = myTeam.score;  // update immediately so it won't trigger again
+        setTimeout(() => {
+            const audio = new Audio("sabres_goalhorn.mp3");
+            audio.play();
+            updateUI(game);
+            goalPending = false;
+        }, 45000);
+    } else if (!goalPending) {
+        myTeamScore = myTeam.score;
         updateUI(game);
-    }, 45000);
-
-    myTeamScore = myTeam.score;
-    updateUI(game);
+    }
 }
 
 function updateUI(game) {
