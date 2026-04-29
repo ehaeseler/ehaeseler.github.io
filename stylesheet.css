@@ -6,20 +6,10 @@
     align-items: center;
     justify-content: center;
     font-size: 80px;
-}
-
-#team1Logo {
-    width: 100px;
-    height: 100px;
-}
-
-#team2Logo {
-    width: 100px;
-    height: 100px;
+    background-color: #003087;
 }
 
 body {
-    font-size: xx-large;
     background-color: #003087;
 }
 
