@@ -22,7 +22,7 @@ async function init() {
     const game = await getScore();
     if (!game) {
         document.getElementById("gameView").style.display = "none";
-        document.getElementById("noGameView").style.display = "block";
+        document.getElementById("noGameView").style.display = "flex";
         return;
     }
     const myTeam = game.homeTeam.abbrev === "BUF" ? game.homeTeam : game.awayTeam;
@@ -55,7 +55,7 @@ function updateUI(game) {
     const otherTeam = game.homeTeam.abbrev === "BUF" ? game.awayTeam : game.homeTeam;
 
     document.getElementById("noGameView").style.display = "none";
-    document.getElementById("gameView").style.display = "block";
+    document.getElementById("gameView").style.display = "flex";
     document.getElementById("team1Logo").src = myTeam.logo;
     // document.getElementById("team1Name").textContent = myTeam.name.default;
     document.getElementById("team1Score").textContent = myTeam.score;
