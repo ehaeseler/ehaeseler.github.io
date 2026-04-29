@@ -19,4 +19,5 @@ body {
     align-items: center;
     gap: 10px;
     flex-wrap: nowrap;
+    height: 100vh;
 }
