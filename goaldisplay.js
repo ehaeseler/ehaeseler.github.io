@@ -13,8 +13,8 @@ async function getScore() {
     const res = await fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/score/now&_=${Date.now()}`);
     const data = await res.json();
     return data.games.find(game =>
-        game.homeTeam.abbrev === "BUF" ||
-        game.awayTeam.abbrev === "BUF"
+        game.homeTeam.abbrev === "MIN" ||
+        game.awayTeam.abbrev === "MIN"
     );
 }
 
@@ -25,7 +25,7 @@ async function init() {
         document.getElementById("noGameView").style.display = "flex";
         return;
     }
-    const myTeam = game.homeTeam.abbrev === "BUF" ? game.homeTeam : game.awayTeam;
+    const myTeam = game.homeTeam.abbrev === "MIN" ? game.homeTeam : game.awayTeam;
     myTeamScore = myTeam.score;
     updateUI(game);
 }
@@ -51,8 +51,8 @@ async function checkForGoal() {
 }
 
 function updateUI(game) {
-    const myTeam = game.homeTeam.abbrev === "BUF" ? game.homeTeam : game.awayTeam;
-    const otherTeam = game.homeTeam.abbrev === "BUF" ? game.awayTeam : game.homeTeam;
+    const myTeam = game.homeTeam.abbrev === "MIN" ? game.homeTeam : game.awayTeam;
+    const otherTeam = game.homeTeam.abbrev === "MIN" ? game.awayTeam : game.homeTeam;
 
     document.getElementById("noGameView").style.display = "none";
     document.getElementById("gameView").style.display = "flex";
