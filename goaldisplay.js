@@ -53,6 +53,20 @@ async function checkForGoal() {
 function updateUI(game) {
     const myTeam = game.homeTeam.abbrev === "MIN" ? game.homeTeam : game.awayTeam;
     const otherTeam = game.homeTeam.abbrev === "MIN" ? game.awayTeam : game.homeTeam;
+    
+    switch(game.gameState) {
+        case "FUT":
+        case "PRE":
+            var date = new Date(game.startTimeUTC);
+            var newDate = currentDate.toLocaleTimeString();
+            document.getElementById("time").textContent = "Game starts at" + newDate;
+            break;
+        case "LIVE":
+            document.getElementById("time").textContent = game.time;
+        case "FIN":
+            document.getElementById("time").textContent = "Final Score"
+            document.getElementById("time").style.fontSize = "45px";
+    }
 
     document.getElementById("noGameView").style.display = "none";
     document.getElementById("gameView").style.display = "flex";
