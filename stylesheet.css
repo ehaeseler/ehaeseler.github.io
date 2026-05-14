@@ -22,3 +22,14 @@ body {
     flex-wrap: nowrap;
     height: 100vh;
 }
+
+#time {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.teams {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
