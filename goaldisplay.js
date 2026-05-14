@@ -38,12 +38,16 @@ async function checkForGoal() {
     if (myTeam.score > myTeamScore && !goalPending) {
         goalPending = true;
         myTeamScore = myTeam.score;  // update immediately so it won't trigger again
-        setTimeout(() => {
-            const audio = new Audio("sabres_goalhorn.mp3");
+        // setTimeout(() => {
+        //     const audio = new Audio("sabres_goalhorn.mp3");
+        //     audio.play();
+        //     updateUI(game);
+        //     goalPending = false;
+        // }, 45000);
+        const audio = new Audio("sabres_goalhorn.mp3");
             audio.play();
             updateUI(game);
             goalPending = false;
-        }, 45000);
     } else if (!goalPending) {
         myTeamScore = myTeam.score;
         updateUI(game);
