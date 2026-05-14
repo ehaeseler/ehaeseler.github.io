@@ -62,7 +62,7 @@ function updateUI(game) {
             document.getElementById("time").textContent = "Game starts at" + newDate;
             break;
         case "LIVE":
-            document.getElementById("time").textContent = game.time;
+            document.getElementById("time").textContent = game.clock.timeRemaining;
         case "FIN":
             document.getElementById("time").textContent = "Final Score"
             document.getElementById("time").style.fontSize = "45px";
