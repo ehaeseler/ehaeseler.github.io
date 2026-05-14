@@ -13,8 +13,8 @@ async function getScore() {
     const res = await fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/score/now&_=${Date.now()}`);
     const data = await res.json();
     return data.games.find(game =>
-        game.homeTeam.abbrev === "MIN" ||
-        game.awayTeam.abbrev === "MIN"
+        game.homeTeam.abbrev === "BUF" ||
+        game.awayTeam.abbrev === "BUF"
     );
 }
 
@@ -25,7 +25,7 @@ async function init() {
         document.getElementById("noGameView").style.display = "flex";
         return;
     }
-    const myTeam = game.homeTeam.abbrev === "MIN" ? game.homeTeam : game.awayTeam;
+    const myTeam = game.homeTeam.abbrev === "BUF" ? game.homeTeam : game.awayTeam;
     myTeamScore = myTeam.score;
     updateUI(game);
 }
@@ -55,14 +55,14 @@ async function checkForGoal() {
 }
 
 function updateUI(game) {
-    const myTeam = game.homeTeam.abbrev === "MIN" ? game.homeTeam : game.awayTeam;
-    const otherTeam = game.homeTeam.abbrev === "MIN" ? game.awayTeam : game.homeTeam;
+    const myTeam = game.homeTeam.abbrev === "BUF" ? game.homeTeam : game.awayTeam;
+    const otherTeam = game.homeTeam.abbrev === "BUF" ? game.awayTeam : game.homeTeam;
     
     switch(game.gameState) {
         case "FUT":
         case "PRE":
             var date = new Date(game.startTimeUTC);
-            var newDate = currentDate.toLocaleTimeString();
+            var newDate = date.toLocaleTimeString();
             document.getElementById("time").textContent = "Game starts at" + newDate;
             break;
         case "LIVE":
