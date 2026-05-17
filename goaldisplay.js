@@ -4,7 +4,7 @@ let gameTime = 0;
 let minutesLeft = 0;
 let secondsLeft = 0;
 let displayTime = 0;
-let teamAbbrev = "COL";
+let teamAbbrev = "BUF";
 
 // document.getElementById("enableSound").addEventListener("click", () => {
 //     const audio = new Audio("sabres_goalhorn.mp3");
