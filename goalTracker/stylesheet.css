@@ -1,0 +1,35 @@
+.box {
+    width: 250px;
+    height: 250px;
+    border: 5px solid #FFB81C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 200px;
+    background-color: white;
+}
+
+body {
+    background-color: #003087;
+    margin: 0;
+}
+
+#gameView {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    height: 100vh;
+}
+
+#time {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.teams {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
