@@ -1,4 +1,4 @@
-.modal {
+.addGroupModal {
     display: flex; 
     justify-content: center;
     z-index: 1; 
@@ -10,7 +10,7 @@
     background-color: rgba(0,0,0,0.4); 
 }
 
-.modal-content {
+.addGroupModal-content {
     background-color: #fefefe;
     margin: 15% auto; 
     padding: 20px;
