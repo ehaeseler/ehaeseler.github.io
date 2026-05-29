@@ -10,7 +10,14 @@
         <div id="groups">
             <h2>Groups</h2>
             <div id="groupSelection">
-                <li><a href="https://ehaeseler-github-io.onrender.com/add_group">Add Group</a></li>
+                <li id="modalOn">Add Group</li>
+            </div>
+            <div id="addGroupModal">
+                <span class="close">&times;</span>
+                <label for="groupName">Group Name:</label> 
+                <input type="text" id="groupName" name="groupName">
+                <label for="password">Group Password:</label> 
+                <input type="text" id="password" name="password">
             </div>
         </div>
     </body>
