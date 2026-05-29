@@ -3,8 +3,8 @@
 //     groups_json = res.json();
 // }
 
-var modal = document.getElementById('addGroupModal').value;
-var modalOn = document.getElementById('modalOn').value;
+var modal = document.getElementById('addGroupModal');
+var modalOn = document.getElementById('modalOn');
 var span = document.getElementsByClassName("close")[0];
 
 modalOn.onclick = function() {
@@ -22,8 +22,8 @@ window.onclick = function(event) {
 }
 
 async function addGroup() {
-    const groupName = document.getElementById('groupName');
-    const groupPass = document.getElementById('password');
+    const groupName = document.getElementById('groupName').value;
+    const groupPass = document.getElementById('password').value;
     
     const res = await fetch('https://ehaeseler-github-io.onrender.com/add_group',
     {
