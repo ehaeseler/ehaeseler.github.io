@@ -7,7 +7,7 @@ var modal = document.getElementById('addGroupModal').value;
 var modalOn = document.getElementById('modalOn').value;
 var span = document.getElementsByClassName("close")[0];
 
-btn.onclick = function() {
+modalOn.onclick = function() {
     modal.style.display = "flex";
 }
   
