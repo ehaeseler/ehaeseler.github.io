@@ -21,7 +21,6 @@ window.onclick = function(event) {
     }
 }
 
-
 async function addGroup() {
     const groupName = document.getElementById('groupName');
     const groupPass = document.getElementById('password');
@@ -38,3 +37,5 @@ async function addGroup() {
     const data = await res.json();
     console.log(data);
 }
+
+document.getElementById('submit').addEventListener("click", addGroup)

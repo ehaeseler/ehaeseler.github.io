@@ -1,5 +1,5 @@
 .addGroupModal {
-    display: flex; 
+    display: none; 
     justify-content: center;
     z-index: 1; 
     left: 0;
