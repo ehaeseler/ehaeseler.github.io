@@ -1,10 +1,10 @@
-async function getGroups() {
-    const res = await fetch('https://ehaeseler-github-io.onrender.com/get_groups');
-    groups_json = res.json();
-}
+// async function getGroups() {
+//     const res = await fetch('https://ehaeseler-github-io.onrender.com/get_groups');
+//     groups_json = res.json();
+// }
 
-var modal = document.getElementById('addGroupModal');
-var modalOn = document.getElementById('modalOn');
+var modal = document.getElementById('addGroupModal').value;
+var modalOn = document.getElementById('modalOn').value;
 var span = document.getElementsByClassName("close")[0];
 
 btn.onclick = function() {
@@ -31,7 +31,10 @@ async function addGroup() {
         method: "POST", headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
             name: groupName,
-            password: password
+            password: groupPass
         })
     });
+
+    const data = await res.json();
+    console.log(data);
 }
