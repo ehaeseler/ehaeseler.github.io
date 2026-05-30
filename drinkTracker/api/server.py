@@ -41,10 +41,12 @@ def get_groups():
     cur = conn.cursor()
 
     cur.execute(
-        '''SELECT group_id, group_name FROM group_table''' #fix this
+        '''SELECT group_id, group_name FROM group_table''' 
     )
     groups_json = cur.fetchall()
-    groups = [group[0] for group in groups_json]
+    groups = []
+    for row in groups_json:
+        groups.append({"id":row[0], "name":row[1]})
     conn.commit()
     cur.close()
 
@@ -63,7 +65,7 @@ def add_group():
 
     cur.execute(
         '''INSERT INTO group_table (group_name, group_password)
-        VALUES (%s, %s) ''',(name, passw)
+        VALUES (%s, %s)''',(name, passw)
     )
 
     conn.commit()
@@ -71,11 +73,32 @@ def add_group():
 
     return jsonify({"success": True})
 
-@app.route("/get_group_members", methods=["GET"])
-def get_group_members():
-    cur = conn.cursor
+@app.route("/check_pass", methods=["GET"])
+def check_pass():
+    group_id = request.args.get("group_id")
+    group_pass = request.args.get("group_pass")
 
-    cur.execute('''SELECT user_id FROM group_users WHERE)
+    cur = conn.cursor()
+
+    passw = hashlib.sha512(group_pass.encode()).hexdigest()
+
+    cur.execute(
+        '''SELECT group_name FROM group_table WHERE group_id=%s AND group_password=%s''', (group_id, passw)
+    )
+    name = cur.fetchone()
+    if name is None:
+        return jsonify({"success": False})
+
+    cur.close()
+
+    return jsonify({"success": True})
+
+
+# @app.route("/get_group_members", methods=["GET"])
+# def get_group_members():
+#     cur = conn.cursor
+
+#     cur.execute('''SELECT user_id FROM group_users WHERE)
 
 
 if __name__ == "__main__":
