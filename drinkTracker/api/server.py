@@ -21,7 +21,6 @@ def home():
 
 @app.route("/add_drink_type", methods=["POST"])
 def add_drink_type():
-
     data = request.json
 
     name = data["name"]
@@ -39,13 +38,13 @@ def add_drink_type():
 
 @app.route("/get_groups", methods=["GET"])
 def get_groups():
-
     cur = conn.cursor()
 
     cur.execute(
-        '''SELECT group_name FROM group_table'''
+        '''SELECT group_id, group_name FROM group_table''' #fix this
     )
-    groups = cur.fetchall()
+    groups_json = cur.fetchall()
+    groups = [group[0] for group in groups_json]
     conn.commit()
     cur.close()
 
@@ -53,7 +52,6 @@ def get_groups():
 
 @app.route("/add_group", methods=["POST"])
 def add_group():
-
     data = request.json
 
     name = data["name"]
@@ -64,7 +62,7 @@ def add_group():
     passw = hashlib.sha512(password.encode()).hexdigest()
 
     cur.execute(
-        ''' INSERT INTO group_table (group_name, group_password)
+        '''INSERT INTO group_table (group_name, group_password)
         VALUES (%s, %s) ''',(name, passw)
     )
 
@@ -72,6 +70,12 @@ def add_group():
     cur.close()
 
     return jsonify({"success": True})
+
+@app.route("/get_group_members", methods=["GET"])
+def get_group_members():
+    cur = conn.cursor
+
+    cur.execute('''SELECT user_id FROM group_users WHERE)
 
 
 if __name__ == "__main__":
