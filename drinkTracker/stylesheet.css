@@ -1,3 +1,10 @@
+body {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(190, 214, 255);
+    color: rgb(0, 0, 0);
+}
+
 .addGroupModal {
     display: none; 
     justify-content: center;
@@ -11,15 +18,15 @@
 }
 
 .addGroupModal-content {
-    background-color: #fefefe;
+    background-color: #ffffff;
     margin: 15% auto; 
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid #555555;
     width: 80%; 
 }
   
 .close {
-    color: #aaa;
+    color: #747373;
     float: right;
     font-size: 28px;
     font-weight: bold;
