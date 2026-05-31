@@ -63,6 +63,7 @@ async function getGroups() {
     for (const group of groups_json) { 
         let id = group.id;
         let name = group.name;
+        console.log("test before name")
         console.log(name);
         const newLi = document.createElement("li");
         newLi.textContent = name;
@@ -75,9 +76,6 @@ async function getGroups() {
             newModal.style.display = "flex";
             groupID = id;
             groupName = name;
-        }
-        span.onclick = function() {
-            newModal.style.display = "none";
         }
         window.onclick = function(event) {
             if (event.target == newModal) {
