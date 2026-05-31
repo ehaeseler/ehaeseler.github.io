@@ -88,7 +88,7 @@ async function getGroups() {
 }
 
 function openPeoplePage() {
-    document.getElementById(groupName).style.display = "none";
+    document.getElementById("groups").style.display = "none";
     document.getElementById("members").style.display = "flex";
     const newHeader = document.createElement("h2");
     newHeader.textContent = groupName;
@@ -109,6 +109,10 @@ async function displayGroupMembers(groupID) {
         newLi.id = username + "-" + id;
         members.appendChild(newLi);
     }
+}
+
+async function addGroupMember() {
+    const username = document.get
 }
 
 window.onload = function() {

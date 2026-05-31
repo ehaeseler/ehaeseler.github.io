@@ -15,21 +15,35 @@
                 </ol>
             </div>
             <div id="addGroupModal">
-                <span class="close">&times;</span>
-                <label for="groupName">Group Name:</label> 
-                <input type="text" id="groupName" name="groupName">
-                <label for="password">Group Password:</label> 
-                <input type="text" id="password" name="password">
-                <button type="button" id="submit">Submit</button>
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <label for="groupName">Group Name:</label> 
+                    <input type="text" id="groupName" name="groupName">
+                    <label for="password">Group Password:</label> 
+                    <input type="text" id="password" name="password">
+                    <button type="button" id="submit">Submit</button>
+                </div>
             </div>
             <div id="enterPassModal">
-                <label for="groupPass">Enter Password:</label>
-                <input type="text" id="groupPass" name="groupPass">
-                <button type="button" id="submitPass">Submit</button>
+                <div class="modal-content">
+                    <label for="groupPass">Enter Password:</label>
+                    <input type="text" id="groupPass" name="groupPass">
+                    <button type="button" id="submitPass">Submit</button>
+                </div>
             </div>
         </div>
         <div id="members">
-            <li id="memberModalOn">Add Member</li>
+            <h2>Members</h2>
+            <ol id="memberList">
+                <li id="memberModalOn">Add Member</li>
+            </ol>
+            <div id="addMemberModal">
+                <div class="modal-content">
+                    <label for="username">Enter Password:</label>
+                    <input type="text" id="username" name="username">
+                    <button type="button" id="submitUsername">Submit</button>
+                </div>
+            </div>
         </div>
     </body>
 </html>

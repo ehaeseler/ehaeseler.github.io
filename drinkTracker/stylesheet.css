@@ -17,7 +17,7 @@ body {
     background-color: rgba(0,0,0,0.4); 
 }
 
-#addGroupModal-content {
+#modal-content {
     background-color: #ffffff;
     margin: 15% auto; 
     padding: 20px;
