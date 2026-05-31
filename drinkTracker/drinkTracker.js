@@ -107,6 +107,6 @@ async function displayGroupMembers(groupID) {
         const newLi = document.createElement("li");
         newLi.textContent = username;
         newLi.id = username + "-" + id;
-        groupList.appendChild(newLi);
+        members.appendChild(newLi);
     }
 }
