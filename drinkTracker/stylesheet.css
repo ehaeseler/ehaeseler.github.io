@@ -5,7 +5,7 @@ body {
     color: rgb(0, 0, 0);
 }
 
-.addGroupModal {
+#addGroupModal {
     display: none; 
     justify-content: center;
     z-index: 1; 
@@ -17,7 +17,7 @@ body {
     background-color: rgba(0,0,0,0.4); 
 }
 
-.addGroupModal-content {
+#addGroupModal-content {
     background-color: #ffffff;
     margin: 15% auto; 
     padding: 20px;
@@ -45,10 +45,10 @@ li:hover {
     background-color: rgb(182, 182, 182);
 }
 
-.members {
+#members {
     display: none;
 }
 
-.enterPassModal {
+#enterPassModal {
     display: none;
 }
