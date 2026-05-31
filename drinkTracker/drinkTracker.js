@@ -110,3 +110,7 @@ async function displayGroupMembers(groupID) {
         members.appendChild(newLi);
     }
 }
+
+window.onload = function() {
+    getGroups();
+};
