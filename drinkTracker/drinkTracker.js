@@ -59,6 +59,7 @@ async function getGroups() {
     {
         method: "GET", headers: {"Content-Type": "application/json"}
     });
+    console.log("test to see if this is being called");
     groups_json = await res.json();
     for (const group of groups_json) { 
         let id = group.id;
