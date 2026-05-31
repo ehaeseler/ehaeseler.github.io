@@ -63,6 +63,7 @@ async function getGroups() {
     for (const group of groups_json) { 
         let id = group.id;
         let name = group.name;
+        console.log(name);
         const newLi = document.createElement("li");
         newLi.textContent = name;
         newLi.id = name;
