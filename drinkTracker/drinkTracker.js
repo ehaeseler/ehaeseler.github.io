@@ -2,6 +2,7 @@ var modal = document.getElementById("addGroupModal");
 var modalOn = document.getElementById("modalOn");
 var span = document.getElementsByClassName("close")[0];
 var groupID = 0
+var groupName = ""
 
 modalOn.onclick = function() {
     modal.style.display = "flex";
@@ -45,7 +46,7 @@ async function submitPassword(groupID) {
     });
     passCheck = await res.json();
     if (passCheck.success) {
-        displayGroupMembers(groupID)
+        openPeoplePage(groupID)
     }
     else {
         console.log("Wrong password");
@@ -67,11 +68,12 @@ async function getGroups() {
         newLi.id = name;
         newLi.class = "groupSelection";
         groupList.appendChild(newLi);
-        groupID = id;
         let newModal = document.getElementById("enterPassModal");
         let passModalOn = document.getElementById(group.name);
         passModalOn.onclick = function() {
             newModal.style.display = "flex";
+            groupID = id;
+            groupName = name;
         }
         span.onclick = function() {
             newModal.style.display = "none";
@@ -82,22 +84,29 @@ async function getGroups() {
             }
         }
     }
-    document.getElementById("submitPass").addEventListener("click", function() {submitPassword(id)});
+    document.getElementById("submitPass").addEventListener("click", function() {submitPassword(groupID)});
 }
 
-function openPeoplePage(group) {
-    document.getElementById(group).style.display = none;
-    document.getElementById("members").style.display = flex;
-    const newHeader = document.createElement("h2")
-    newHeader.textContent = group
-    
+function openPeoplePage() {
+    document.getElementById(groupName).style.display = "none";
+    document.getElementById("members").style.display = "flex";
+    const newHeader = document.createElement("h2");
+    newHeader.textContent = groupName;
+    displayGroupMembers(groupID);
 }
 
-async function displayGroupMembers(groupId) {
-    const res = await fetch(`https://ehaeseler-github-io.onrender.com/get_group_members?group_id=${groupId}`,
+async function displayGroupMembers(groupID) {
+    const res = await fetch(`https://ehaeseler-github-io.onrender.com/get_group_members?group_id=${groupID}`,
     {
         method: "GET", headers: {"Content-Type": "application/json"}
     });
     members_json = await res.json();
-
+    for (const member of members_json) {
+        let id = member.id;
+        let username = member.name;
+        const newLi = document.createElement("li");
+        newLi.textContent = username;
+        newLi.id = username + "-" + id;
+        groupList.appendChild(newLi);
+    }
 }

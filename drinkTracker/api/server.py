@@ -94,11 +94,18 @@ def check_pass():
     return jsonify({"success": True})
 
 
-# @app.route("/get_group_members", methods=["GET"])
-# def get_group_members():
-#     cur = conn.cursor
-
-#     cur.execute('''SELECT user_id FROM group_users WHERE)
+@app.route("/get_group_members", methods=["GET"])
+def get_group_members(groupID):
+    cur = conn.cursor()
+    cur.execute('''SELECT user_id FROM group_users WHERE group_id=%s''', (groupID))
+    ids = cur.fetchall()
+    members = []
+    for id in ids:
+        cur.execute('''SELECT user_name, user_id FROM user_table WHERE user_id=%s''', (id))
+        row = cur.fetchall()
+        members.append({"id":row[0], "name":row[1]})
+    cur.close()
+    return jsonify(members)
 
 
 if __name__ == "__main__":
