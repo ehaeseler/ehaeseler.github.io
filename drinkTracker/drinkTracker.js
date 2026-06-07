@@ -33,6 +33,14 @@ async function addGroup() {
 
     const data = await res.json();
     console.log(data);
+
+    const groupList = document.getElementById("groupList")
+    for (const group of [...groupList]) {
+        if (group.id != "modalOn") {
+            group.remove();
+        }
+    }
+    getGroups()
 }
 
 document.getElementById("submit").addEventListener("click", addGroup);
@@ -46,6 +54,7 @@ async function submitPassword(groupID) {
     });
     passCheck = await res.json();
     if (passCheck.success) {
+        document.getElementById("enterPassModal").style.display = "none";
         openPeoplePage(groupID)
     }
     else {
@@ -112,7 +121,27 @@ async function displayGroupMembers(groupID) {
 }
 
 async function addGroupMember() {
-    const username = document.get
+    const username = document.getElementById("username").value;
+
+    const res = await fetch("https://ehaeseler-github-io.onrender.com/add_member",
+    {
+        method: "POST", headers: {"Content-Type": "application/json"}, 
+        body: JSON.stringify({
+            group_id: groupID,
+            username: username
+        })
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    const memberList = document.getElementById("memberList")
+    for (const member of [...memberList]) {
+        if (member.id != "memberModalOn") {
+            member.remove();
+        }
+    }
+    displayGroupMembers()
 }
 
 window.onload = function() {

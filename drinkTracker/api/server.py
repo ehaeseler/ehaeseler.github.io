@@ -63,10 +63,8 @@ def add_group():
 
     passw = hashlib.sha512(password.encode()).hexdigest()
 
-    cur.execute(
-        '''INSERT INTO group_table (group_name, group_password)
-        VALUES (%s, %s)''',(name, passw)
-    )
+    cur.execute('''INSERT INTO group_table (group_name, group_password)
+                VALUES (%s, %s)''', (name, passw))
 
     conn.commit()
     cur.close()
@@ -82,9 +80,7 @@ def check_pass():
 
     passw = hashlib.sha512(group_pass.encode()).hexdigest()
 
-    cur.execute(
-        '''SELECT group_name FROM group_table WHERE group_id=%s AND group_password=%s''', (group_id, passw)
-    )
+    cur.execute('''SELECT group_name FROM group_table WHERE group_id=%s AND group_password=%s''', (group_id, passw))
     name = cur.fetchone()
     if name is None:
         return jsonify({"success": False})
@@ -95,17 +91,37 @@ def check_pass():
 
 
 @app.route("/get_group_members", methods=["GET"])
-def get_group_members(groupID):
+def get_group_members():
+    groupID = request.args.get("group_id")
     cur = conn.cursor()
     cur.execute('''SELECT user_id FROM group_users WHERE group_id=%s''', (groupID,))
     ids = cur.fetchall()
     members = []
-    for id in ids:
-        cur.execute('''SELECT user_name, user_id FROM user_table WHERE user_id=%s''', (id,))
-        row = cur.fetchall()
-        members.append({"id":row[0], "name":row[1]})
+
+    for row in ids:
+        uid = row[0]
+        cur.execute('''SELECT user_id, user_name FROM user_table WHERE user_id=%s''', (uid,))
+        names = cur.fetchone()
+        members.append({"id":names[0], "name":names[1]})
+
     cur.close()
     return jsonify(members)
+
+@app.route("/add_member", methods=["POST"])
+def add_member():
+    data = request.json
+    groupID = data["geoup_id"]
+    username = data["username"]
+
+    cur = conn.cursor()
+    cur.execute('''INSERT INTO user_table (username)
+                VALUES (%s)''', (username,))
+    cur.execute('''INSERT INTO group_users (user_id, group_id)
+                VALUES (%s, %s)''', (username, groupID))
+    
+    conn.commit()
+    cur.close()
+    return jsonify({"success": True})
 
 
 if __name__ == "__main__":
