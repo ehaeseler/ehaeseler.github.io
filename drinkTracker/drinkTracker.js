@@ -16,6 +16,20 @@ window.onclick = function(event) {
     if (event.target == modal) {
       modal.style.display = "none";
     }
+
+    if (event.target == document.getElementById("enterPassModal")) {
+        document.getElementById("enterPassModal").style.display = "none";
+    }
+}
+
+async function awaitServer(func) {
+    const loading = document.getElementById('serverRunning');
+    loading.style.display = "block";
+    try {
+        return await func
+    } finally {
+        loading.style.display = "none";
+    }
 }
 
 async function addGroup() {
@@ -55,7 +69,7 @@ async function submitPassword(groupID) {
     passCheck = await res.json();
     if (passCheck.success) {
         document.getElementById("enterPassModal").style.display = "none";
-        openPeoplePage(groupID)
+        openPeoplePage()
     }
     else {
         console.log("Wrong password");
@@ -104,7 +118,7 @@ function openPeoplePage() {
     displayGroupMembers(groupID);
 }
 
-async function displayGroupMembers(groupID) {
+async function displayGroupMembers() {
     const res = await fetch(`https://ehaeseler-github-io.onrender.com/get_group_members?group_id=${groupID}`,
     {
         method: "GET", headers: {"Content-Type": "application/json"}
@@ -144,6 +158,6 @@ async function addGroupMember() {
     displayGroupMembers()
 }
 
-window.onload = function() {
-    getGroups();
+window.onload = async function() {
+    await awaitServer(() => getGroups())
 };

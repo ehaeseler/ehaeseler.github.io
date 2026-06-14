@@ -110,14 +110,16 @@ def get_group_members():
 @app.route("/add_member", methods=["POST"])
 def add_member():
     data = request.json
-    groupID = data["geoup_id"]
+    groupID = data["group_id"]
     username = data["username"]
 
     cur = conn.cursor()
     cur.execute('''INSERT INTO user_table (username)
                 VALUES (%s)''', (username,))
-    cur.execute('''INSERT INTO group_users (user_id, group_id)
-                VALUES (%s, %s)''', (username, groupID))
+    cur.execute('''SELECT user_id FROM user_table WHERE username = %s''', (username,))
+    user_id = cur.fetchone()
+    cur.execute('''INSERT INTO group_users (user_, group_id)
+                VALUES (%s, %s)''', (user_id, groupID))
     
     conn.commit()
     cur.close()
