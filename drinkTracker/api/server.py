@@ -19,6 +19,14 @@ conn = psycopg2.connect(DATABASE_URL)
 def home():
     return "Flask server running"
 
+def get_conn():
+    global conn
+    try:
+        conn.cursor().execute("SELECT 1")
+    except:
+        conn = psycopg2.connect(DATABASE_URL)
+    return conn
+
 @app.route("/add_drink_type", methods=["POST"])
 def add_drink_type():
     data = request.json
@@ -26,7 +34,7 @@ def add_drink_type():
     name = data["name"]
     amount = data["amount"]
 
-    cur = conn.cursor()
+    cur = get_conn().cursor()
 
     cur.execute(
         '''INSERT INTO drink_entries (drink_name, drink_amount)
@@ -38,7 +46,7 @@ def add_drink_type():
 
 @app.route("/get_groups", methods=["GET"])
 def get_groups():
-    cur = conn.cursor()
+    cur = get_conn().cursor()
 
     cur.execute(
         '''SELECT group_id, group_name FROM group_table''' 
@@ -47,7 +55,7 @@ def get_groups():
     groups = []
     for row in groups_json:
         groups.append({"id":row[0], "name":row[1]})
-    conn.commit()
+    get_conn().commit()
     cur.close()
 
     return jsonify(groups)
@@ -59,14 +67,14 @@ def add_group():
     name = data["name"]
     password = data["password"]
 
-    cur = conn.cursor()
+    cur = get_conn().cursor()
 
     passw = hashlib.sha512(password.encode()).hexdigest()
 
     cur.execute('''INSERT INTO group_table (group_name, group_password)
                 VALUES (%s, %s)''', (name, passw))
 
-    conn.commit()
+    get_conn().commit()
     cur.close()
 
     return jsonify({"success": True})
@@ -76,7 +84,7 @@ def check_pass():
     group_id = request.args.get("group_id")
     group_pass = request.args.get("group_pass")
 
-    cur = conn.cursor()
+    cur = get_conn().cursor()
 
     passw = hashlib.sha512(group_pass.encode()).hexdigest()
 
@@ -93,7 +101,7 @@ def check_pass():
 @app.route("/get_group_members", methods=["GET"])
 def get_group_members():
     groupID = request.args.get("group_id")
-    cur = conn.cursor()
+    cur = get_conn().cursor()
     cur.execute('''SELECT user_id FROM group_users WHERE group_id=%s''', (groupID,))
     ids = cur.fetchall()
     members = []
@@ -113,7 +121,7 @@ def add_member():
     groupID = data["group_id"]
     username = data["username"]
 
-    cur = conn.cursor()
+    cur = get_conn().cursor()
     cur.execute('''INSERT INTO user_table (username)
                 VALUES (%s)''', (username,))
     cur.execute('''SELECT user_id FROM user_table WHERE username = %s''', (username,))
@@ -121,7 +129,7 @@ def add_member():
     cur.execute('''INSERT INTO group_users (user_, group_id)
                 VALUES (%s, %s)''', (user_id, groupID))
     
-    conn.commit()
+    get_conn().commit()
     cur.close()
     return jsonify({"success": True})
 
