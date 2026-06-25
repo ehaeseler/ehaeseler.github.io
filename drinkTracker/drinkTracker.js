@@ -36,7 +36,7 @@ async function addGroup() {
     const groupName = document.getElementById("groupName").value;
     const groupPass = document.getElementById("password").value;
     
-    const res = await fetch("https://ehaeseler-github-io.onrender.com/add_group",
+    const res = await fetch("http://127.0.0.1:8000/add_group",
     {
         method: "POST", headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -62,7 +62,7 @@ document.getElementById("submit").addEventListener("click", addGroup);
 async function submitPassword(groupID) {
     const groupPass = document.getElementById("groupPass").value;
 
-    const res = await fetch (`https://ehaeseler-github-io.onrender.com/check_pass?group_id=${groupID}&group_pass=${groupPass}`,
+    const res = await fetch (`http://127.0.0.1:8000/check_pass?group_id=${groupID}&group_pass=${groupPass}`,
     {
         method: "GET", headers: {"Content-Type": "application/json"}
     });
@@ -78,7 +78,7 @@ async function submitPassword(groupID) {
 
 async function getGroups() {
     const groupList = document.getElementById("groupList");
-    const res = await fetch("https://ehaeseler-github-io.onrender.com/get_groups",
+    const res = await fetch("http://127.0.0.1:8000/get_groups",
     {
         method: "GET", headers: {"Content-Type": "application/json"}
     });
@@ -119,7 +119,7 @@ function openPeoplePage() {
 }
 
 async function displayGroupMembers() {
-    const res = await fetch(`https://ehaeseler-github-io.onrender.com/get_group_members?group_id=${groupID}`,
+    const res = await fetch(`http://127.0.0.1:8000/get_group_members?group_id=${groupID}`,
     {
         method: "GET", headers: {"Content-Type": "application/json"}
     });
@@ -137,7 +137,7 @@ async function displayGroupMembers() {
 async function addGroupMember() {
     const username = document.getElementById("username").value;
 
-    const res = await fetch("https://ehaeseler-github-io.onrender.com/add_member",
+    const res = await fetch("http://127.0.0.1:8000/add_member",
     {
         method: "POST", headers: {"Content-Type": "application/json"}, 
         body: JSON.stringify({
