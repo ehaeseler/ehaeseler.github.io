@@ -106,7 +106,6 @@ async function getGroups() {
 
 document.getElementById("submitPass").addEventListener("click", function() {submitPassword(groupID)});
 
-
 function openPeoplePage() {
     document.getElementById("groups").style.display = "none";
     document.getElementById("enterPassModal").style.display = "none";
@@ -128,7 +127,7 @@ async function displayGroupMembers() {
         const newLi = document.createElement("li");
         newLi.textContent = username;
         newLi.id = username + "-" + id;
-        members.appendChild(newLi);
+        document.getElementById("memberList").appendChild(newLi);
     }
 }
 
@@ -155,6 +154,8 @@ async function addGroupMember() {
     }
     displayGroupMembers()
 }
+
+document.getElementById("submitUsername").addEventListener("click", addGroupMember);
 
 window.onload = async function() {
     console.log("page loaded")

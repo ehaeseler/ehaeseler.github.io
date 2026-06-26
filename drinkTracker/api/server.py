@@ -66,8 +66,8 @@ def add_group():
 
     name = data["name"]
     password = data["password"]
-    if (password == None):
-        print("test")
+    # if (password == None):
+    #     print("test")
 
     cur = get_conn().cursor()
 
@@ -128,7 +128,7 @@ def add_member():
                 VALUES (%s)''', (username,))
     cur.execute('''SELECT user_id FROM user_table WHERE username = %s''', (username,))
     user_id = cur.fetchone()
-    cur.execute('''INSERT INTO group_users (user_, group_id)
+    cur.execute('''INSERT INTO group_users (user_id, group_id)
                 VALUES (%s, %s)''', (user_id, groupID))
     
     get_conn().commit()
