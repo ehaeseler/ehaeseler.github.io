@@ -66,6 +66,8 @@ def add_group():
 
     name = data["name"]
     password = data["password"]
+    if (password == None):
+        print("test")
 
     cur = get_conn().cursor()
 

@@ -26,7 +26,7 @@ async function awaitServer(func) {
     const loading = document.getElementById('serverRunning');
     loading.style.display = "block";
     try {
-        return await func
+        return await func()
     } finally {
         loading.style.display = "none";
     }
@@ -49,7 +49,7 @@ async function addGroup() {
     console.log(data);
 
     const groupList = document.getElementById("groupList")
-    for (const group of [...groupList]) {
+    for (const group of [...groupList.children]) {
         if (group.id != "modalOn") {
             group.remove();
         }
@@ -101,17 +101,15 @@ async function getGroups() {
             groupID = id;
             groupName = name;
         }
-        window.onclick = function(event) {
-            if (event.target == newModal) {
-              newModal.style.display = "none";
-            }
-        }
     }
-    document.getElementById("submitPass").addEventListener("click", function() {submitPassword(groupID)});
 }
+
+document.getElementById("submitPass").addEventListener("click", function() {submitPassword(groupID)});
+
 
 function openPeoplePage() {
     document.getElementById("groups").style.display = "none";
+    document.getElementById("enterPassModal").style.display = "none";
     document.getElementById("members").style.display = "flex";
     const newHeader = document.createElement("h2");
     newHeader.textContent = groupName;
@@ -137,7 +135,7 @@ async function displayGroupMembers() {
 async function addGroupMember() {
     const username = document.getElementById("username").value;
 
-    const res = await fetch("http://127.0.0.1:8000/add_member",
+    const res = await fetch("http://127.0.0.1:5000/add_member",
     {
         method: "POST", headers: {"Content-Type": "application/json"}, 
         body: JSON.stringify({
@@ -159,5 +157,6 @@ async function addGroupMember() {
 }
 
 window.onload = async function() {
+    console.log("page loaded")
     await awaitServer(() => getGroups())
 };
