@@ -110,7 +110,7 @@ def get_group_members():
 
     for row in ids:
         uid = row[0]
-        cur.execute('''SELECT user_id, user_name FROM user_table WHERE user_id=%s''', (uid,))
+        cur.execute('''SELECT user_id, username FROM user_table WHERE user_id=%s''', (uid,))
         names = cur.fetchone()
         members.append({"id":names[0], "name":names[1]})
 
@@ -128,6 +128,11 @@ def add_member():
                 VALUES (%s)''', (username,))
     cur.execute('''SELECT user_id FROM user_table WHERE username = %s''', (username,))
     user_id = cur.fetchone()
+    cur.execute('''SELECT user_id FROM user_table 
+                JOIN group_users ON user_table.user_id = group_users.user_id 
+                WHERE group_users.group_id = %s AND user_table.username = %s''', (groupID, username))
+    if (cur.fetchone != None):
+        return jsonify({"success": False})
     cur.execute('''INSERT INTO group_users (user_id, group_id)
                 VALUES (%s, %s)''', (user_id, groupID))
     

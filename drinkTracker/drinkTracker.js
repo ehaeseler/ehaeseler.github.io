@@ -147,7 +147,7 @@ async function addGroupMember() {
     console.log(data);
 
     const memberList = document.getElementById("memberList")
-    for (const member of [...memberList]) {
+    for (const member of [...memberList.children]) {
         if (member.id != "memberModalOn") {
             member.remove();
         }
