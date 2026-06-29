@@ -31,8 +31,8 @@ def get_conn():
 def add_drink_type():
     data = request.json
 
-    name = data["name"]
-    amount = data["amount"]
+    name = data.get("name")
+    amount = data.get("amount")
 
     cur = get_conn().cursor()
 
@@ -64,12 +64,16 @@ def get_groups():
 def add_group():
     data = request.json
 
-    name = data["name"]
-    password = data["password"]
-    # if (password == None):
-    #     print("test")
+    name = data.get("name")
+    password = data.get("password")
+    if (not name or not password):
+        return jsonify({"userpassTest": False})
 
     cur = get_conn().cursor()
+
+    cur.execute('''SELECT group_id FROM group_table WHERE group_name=%s''', (name,))
+    if (cur.fetchone() is not None):
+        return jsonify({"success": False})
 
     passw = hashlib.sha512(password.encode()).hexdigest()
 
@@ -120,19 +124,21 @@ def get_group_members():
 @app.route("/add_member", methods=["POST"])
 def add_member():
     data = request.json
-    groupID = data["group_id"]
-    username = data["username"]
-
+    groupID = data.get("group_id")
+    username = data.get("username")
+    print(data)
+    if (not username):
+        return jsonify({"usernameTest": False})
     cur = get_conn().cursor()
+    cur.execute('''SELECT u.user_id FROM user_table u
+                JOIN group_users gu ON u.user_id = gu.user_id 
+                WHERE gu.group_id = %s AND u.username = %s''', (groupID, username))
+    if (cur.fetchone() is not None):
+        return jsonify({"success": False})
     cur.execute('''INSERT INTO user_table (username)
                 VALUES (%s)''', (username,))
     cur.execute('''SELECT user_id FROM user_table WHERE username = %s''', (username,))
     user_id = cur.fetchone()
-    cur.execute('''SELECT user_id FROM user_table 
-                JOIN group_users ON user_table.user_id = group_users.user_id 
-                WHERE group_users.group_id = %s AND user_table.username = %s''', (groupID, username))
-    if (cur.fetchone != None):
-        return jsonify({"success": False})
     cur.execute('''INSERT INTO group_users (user_id, group_id)
                 VALUES (%s, %s)''', (user_id, groupID))
     

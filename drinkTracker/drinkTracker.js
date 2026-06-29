@@ -20,6 +20,10 @@ window.onclick = function(event) {
     if (event.target == document.getElementById("enterPassModal")) {
         document.getElementById("enterPassModal").style.display = "none";
     }
+
+    if (event.target == document.getElementById("addMemberModal")) {
+        document.getElementById("addMemberModal").style.display = "none";
+    }
 }
 
 async function awaitServer(func) {
@@ -46,6 +50,14 @@ async function addGroup() {
     });
 
     const data = await res.json();
+    if (!data.userpassTest) {
+        document.getElementById("userError").textContent = "Username or Password cannot be null";
+        return;
+    }
+    if (!data.success) {
+        document.getElementById("userError").textContent = "Group name is already taken";
+        return;
+    }
     console.log(data);
 
     const groupList = document.getElementById("groupList")
@@ -113,6 +125,9 @@ function openPeoplePage() {
     const newHeader = document.createElement("h2");
     newHeader.textContent = groupName;
     displayGroupMembers(groupID);
+    document.getElementById("memberModalOn").onclick = function() {
+        addMemberModal.style.display = "flex";
+    }
 }
 
 async function displayGroupMembers() {
@@ -143,7 +158,18 @@ async function addGroupMember() {
         })
     });
 
+    document.getElementById("memberError").textContent = "";
+
+
     const data = await res.json();
+    if (!data.usernameTest) {
+        document.getElementById("memberError").textContent = "Username cannot be null";
+        return;
+    }
+    if (!data.success) {
+        document.getElementById("memberError").textContent = "Username is already taken in group";
+        return;
+    }
     console.log(data);
 
     const memberList = document.getElementById("memberList")
