@@ -85,6 +85,15 @@ def add_group():
 
     return jsonify({"success": True})
 
+@app.route("/delete_group", methods=["DELETE"])
+def delete_group():
+    data = request.json
+    group_id = data.get("group_id")
+
+    cur = get_conn().cursor()
+
+    cur.execute('''DELETE ''') #finish this
+
 @app.route("/check_pass", methods=["GET"])
 def check_pass():
     group_id = request.args.get("group_id")
