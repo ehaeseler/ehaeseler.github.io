@@ -92,7 +92,13 @@ def delete_group():
 
     cur = get_conn().cursor()
 
-    cur.execute('''DELETE ''') #finish this
+    cur.execute('''DELETE FROM group_users WHERE group_id = %s''', (group_id,))
+    cur.execute('''DELETE FROM group_table WHERE group_id = %s''', (group_id,)) 
+
+    get_conn().commit()
+    cur.close()
+    
+    return jsonify({"Success": True})
 
 @app.route("/check_pass", methods=["GET"])
 def check_pass():

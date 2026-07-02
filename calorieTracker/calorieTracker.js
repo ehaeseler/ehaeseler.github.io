@@ -6,7 +6,7 @@ var groupName = ""
 document.getElementById("submit").addEventListener("click", addGroup);
 document.getElementById("submitPass").addEventListener("click", function() {submitPassword(groupID)});
 document.getElementById("submitUsername").addEventListener("click", addGroupMember);
-document.getElementById("deleteGroup").addEventListener("click", )
+document.getElementById("deleteGroup").addEventListener("click", submitDeleteGroup)
 
 
 modalOn.onclick = function() {
@@ -76,6 +76,7 @@ async function addGroup() {
         }
     }
     getGroups()
+    document.getElementById("addGroupModal").style.display = "none";
 }
 
 
@@ -122,6 +123,8 @@ async function deleteGroup() {
                 group_id: groupID
             })
         });
+    getGroups();
+    document.getElementById("enterPassModal").style.display = "none";
 }
 
 async function getGroups() {
