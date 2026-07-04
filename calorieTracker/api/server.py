@@ -27,23 +27,6 @@ def get_conn():
         conn = psycopg2.connect(DATABASE_URL)
     return conn
 
-@app.route("/add_drink_type", methods=["POST"])
-def add_drink_type():
-    data = request.json
-
-    name = data.get("name")
-    amount = data.get("amount")
-
-    cur = get_conn().cursor()
-
-    cur.execute(
-        '''INSERT INTO drink_entries (drink_name, drink_amount)
-        VALUES (%s, %s)''',(name, amount)
-    )
-    cur.close()
-
-    return jsonify({"success": True})
-
 @app.route("/get_groups", methods=["GET"])
 def get_groups():
     cur = get_conn().cursor()
@@ -97,7 +80,7 @@ def delete_group():
 
     get_conn().commit()
     cur.close()
-    
+
     return jsonify({"Success": True})
 
 @app.route("/check_pass", methods=["GET"])

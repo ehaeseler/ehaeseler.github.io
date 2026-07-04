@@ -6,7 +6,7 @@ var groupName = ""
 document.getElementById("submit").addEventListener("click", addGroup);
 document.getElementById("submitPass").addEventListener("click", function() {submitPassword(groupID)});
 document.getElementById("submitUsername").addEventListener("click", addGroupMember);
-document.getElementById("deleteGroup").addEventListener("click", submitDeleteGroup)
+document.getElementById("deleteGroup").addEventListener("click", function() {submitDeleteGroup()});
 
 
 modalOn.onclick = function() {
@@ -91,15 +91,18 @@ async function submitPassword(groupID) {
     passCheck = await res.json();
     if (passCheck.success) {
         document.getElementById("enterPassModal").style.display = "none";
-        openPeoplePage()
+        openPeoplePage();
     }
     else {
-        console.log("Wrong password");
+        document.getElementById("passwordError").textContent = "Password is incorrect";
     }
 }
 
-async function submitDeleteGroup(groupID) {
+async function submitDeleteGroup() {
     const groupPass = document.getElementById("groupPass").value;
+    console.log("test for password call")
+    console.log(groupID)
+    console.log(groupPass)
 
     const res = await fetch (`http://127.0.0.1:5000/check_pass?group_id=${groupID}&group_pass=${groupPass}`,
     {
@@ -111,7 +114,7 @@ async function submitDeleteGroup(groupID) {
         deleteGroup()
     }
     else {
-        console.log("Wrong password");
+        document.getElementById("passwordError").textContent = "Password is incorrect";
     }
 }
 
@@ -123,6 +126,11 @@ async function deleteGroup() {
                 group_id: groupID
             })
         });
+    for (const group of [...groupList.children]) {
+        if (group.id != "modalOn") {
+            group.remove();
+        }
+    }
     getGroups();
     document.getElementById("enterPassModal").style.display = "none";
 }

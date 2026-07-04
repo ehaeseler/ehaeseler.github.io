@@ -1,8 +1,6 @@
 DROP TABLE IF EXISTS user_table CASCADE;
 DROP TABLE IF EXISTS group_table CASCADE;
 DROP TABLE IF EXISTS group_users CASCADE;
-DROP TABLE IF EXISTS drink_table CASCADE;
-DROP TABLE IF EXISTS drink_tally CASCADE;
 
 CREATE TABLE user_table (
     user_id SERIAL PRIMARY KEY NOT NULL,
@@ -20,22 +18,3 @@ CREATE TABLE group_users (
     group_id INTEGER REFERENCES group_table(group_id)
 );
 
-CREATE TABLE drink_table (
-    drink_id SERIAL PRIMARY KEY NOT NULL,
-    drink_name TEXT,
-    drink_amount INTEGER
-);
-
-CREATE TABLE drink_tally (
-    user_id INTEGER REFERENCES user_table(user_id),
-    drink_id INTEGER REFERENCES drink_table(drink_id),
-    date_added DATE
-);
-
-INSERT INTO drink_table(drink_name, drink_amount)
-    VALUES
-        ('Beer', 1),
-        ('Shot', 1),
-        ('Single Mixed Drink', 1),
-        ('Double Mixed Drink', 2),
-        ('Glass of Wine', 1);
