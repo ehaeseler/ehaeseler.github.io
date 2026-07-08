@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import './App.css'
 
-
+const usernameRef = useRef();
+const passwordRef = useRef();
 
 function Login() {
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
+    
 
     async function handleLogin() {
-        setPassword()
         const res = await fetch (`http://127.0.0.1:8000/check_login?username=${username}&password=${password}`,
             {
                 method: "GET", headers: {"Content-Type" : "application/json"}
@@ -22,16 +23,17 @@ function Login() {
         <>
             <InputGroup className="mb-3">
                 <InputGroup.Text id="userInput">Username:</InputGroup.Text>
-                <FormControl></FormControl>
+                <FormControl ref={usernameRef}></FormControl>
             </InputGroup>
 
             <InputGroup className="mb-3">
                 <InputGroup.Text id="passInput">Password:</InputGroup.Text>
+                <FormControl ref={passwordRef}></FormControl>
             </InputGroup>
 
             <p id="userPassError"></p>
 
-            <Button onClick={handleLogin()}>Submit</Button>
+            <Button onClick={handleLogin}>Submit</Button>
         </>
     )
 }
