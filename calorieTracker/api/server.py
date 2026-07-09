@@ -4,9 +4,19 @@ import psycopg2
 import os
 import hashlib
 
+from fastapi.middleware.cors import CORSMiddleware
+
+
 load_dotenv()
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # your Vite dev server origin
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -30,11 +40,14 @@ def check_login(username: str, password: str):
 
     passw = hashlib.sha512(password.encode()).hexdigest()
 
-    cur.execute('''SELECT group_name FROM group_table WHERE username=%s AND pass=%s''', (username, passw))
-    name = cur.fetchone()
-    if name is None:
+    cur.execute('''SELECT user_id FROM user_table WHERE username=%s AND passw=%s''', (username, passw))
+    id = cur.fetchone()
+    cur.close()
+    if id is None:
         return ({"success": False})
 
-    cur.close()
 
-    return ({"success": True})
+    return ({"success": True, "id": id[0]})
+
+if __name__ == "__main__":
+    app.run(debug=True)

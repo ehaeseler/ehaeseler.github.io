@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS group_users CASCADE;
 
 CREATE TABLE user_table (
     user_id SERIAL PRIMARY KEY NOT NULL,
-    username TEXT
-    pass text
+    username TEXT,
+    passw text
 );
 
 CREATE TABLE group_table (

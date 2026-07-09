@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import './App.css'
+import Login from "./Login.jsx"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null);
 
-  return (
-    <h1>title</h1>
-  )
+  if (user) {
+    return <div>Dashboard coming soon</div>;
+  }
+  return <Login onLogin={setUser} />;
 }
 
 export default App
