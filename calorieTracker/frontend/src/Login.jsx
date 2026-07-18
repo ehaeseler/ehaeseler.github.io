@@ -13,23 +13,32 @@ function Login({onLogin}) {
     const [error, setError] = useState("");
     
     async function handleLogin() {
+        console.log("new version")
     
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
-        const res = await fetch (`http://127.0.0.1:8000/login?username=${username}&password=${password}`,
-            {
-                method: "GET", headers: {"Content-Type" : "application/json"}
-            }
-        )
+        const body = new URLSearchParams();
+        body.append("username", username);
+        body.append("password", password);
+
+        const res = await fetch(`http://127.0.0.1:8000/token`,
+        {
+            method: "POST", headers: {"Content-Type" : "application/x-www-form-urlencoded"},
+            body: body
+        });
         const data = await res.json();
-        if (!data.success) {
+        if (!res.ok) {
             setError("Username or password is incorrect")
+            return;
         }
-        else {
-            //display stats and stuff
-            console.log("username and password is correct")
-            onLogin(data)
-        }
+        localStorage.setItem("token", data.access_token);
+
+        const resp = await fetch("http://127.0.0.1:8000/users/me",
+        {
+            method: "GET", headers: {"Authorization": `Bearer ${data.access_token}`}
+        });
+        const userData = await resp.json()
+        onLogin(userData)
     }
 
     return (

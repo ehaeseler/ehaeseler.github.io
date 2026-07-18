@@ -117,6 +117,11 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         raise credentials_exception
     return user
 
+async def get_current_active_user(
+    current_user: Annotated[User, Depends(get_current_user)],
+    ):
+    return current_user
+
 @app.post("/token")
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
@@ -134,19 +139,8 @@ async def login_for_access_token(
     )
     return Token(access_token=access_token, token_type="bearer")
 
-
-@app.get("/login")
-def check_login(username: str, password: str):
-    cur = get_conn().cursor()
-
-    cur.execute('''SELECT passw FROM user_table WHERE username=%s''', (username, ))
-    hashed_pass = cur.fetchone()
-    cur.execute('''SELECT user_id FROM user_table WHERE username=%s''', (username, ))
-    uid = cur.fetchone()
-    cur.close()
-    if hashed_pass is None:
-        return ({"success": False})
-    password_hash.verify(password, hashed_pass[0])
-
-
-    return ({"success": True, "id": uid[0]})
+@app.get("/users/me")
+async def read_users_me(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    ) -> User:
+    return current_user
