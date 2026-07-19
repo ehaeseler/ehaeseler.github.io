@@ -33,12 +33,12 @@ function Login({onLogin}) {
         }
         localStorage.setItem("token", data.access_token);
 
-        const resp = await fetch("http://127.0.0.1:8000/users/me",
-        {
-            method: "GET", headers: {"Authorization": `Bearer ${data.access_token}`}
+        const resp = await fetch("http://127.0.0.1:8000/users/me", {
+            method: "GET",
+            headers: {"Authorization": `Bearer ${data.access_token}`}
         });
-        const userData = await resp.json()
-        onLogin(userData)
+        const userData = await resp.json();
+        onLogin(userData);
     }
 
     return (
