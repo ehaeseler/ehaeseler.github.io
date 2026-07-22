@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom'
+
 
 import './App.css'
 
@@ -11,10 +13,9 @@ function Login({onLogin}) {
     const usernameRef = useRef();
     const passwordRef = useRef();
     const [error, setError] = useState("");
+    const navigate = useNavigate()
     
     async function handleLogin() {
-        console.log("new version")
-    
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
         const body = new URLSearchParams();
@@ -31,7 +32,7 @@ function Login({onLogin}) {
             setError("Username or password is incorrect")
             return;
         }
-        localStorage.setItem("token", data.access_token);
+        sessionStorage.setItem("token", data.access_token);
 
         const resp = await fetch("http://127.0.0.1:8000/users/me", {
             method: "GET",
@@ -39,6 +40,7 @@ function Login({onLogin}) {
         });
         const userData = await resp.json();
         onLogin(userData);
+        navigate("/")
     }
 
     return (

@@ -144,3 +144,11 @@ async def read_users_me(
     current_user: Annotated[User, Depends(get_current_active_user)],
     ) -> User:
     return current_user
+
+@app.get("/register")
+def register_user(username: str):
+    cur = get_conn().cursor()
+    cur.execute('''SELECT user_id FROM user_table where username = %s''', (username,))
+    data = cur.fetchone()
+    if (data[0] is None):
+        return {"success": False}
