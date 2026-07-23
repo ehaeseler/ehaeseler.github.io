@@ -29,7 +29,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard user={user} />}></Route>
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={setUser}/>}></Route>
-        {/* <Route path="/register" element={<Register />}></Route> */}
+        <Route path="/register" element={<Register />}></Route>
       </Routes>
     // </BrowserRouter>
   )

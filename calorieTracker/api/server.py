@@ -123,9 +123,7 @@ async def get_current_active_user(
     return current_user
 
 @app.post("/token")
-async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-) -> Token:
+async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],) -> Token:
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -146,9 +144,22 @@ async def read_users_me(
     return current_user
 
 @app.get("/register")
-def register_user(username: str):
+def register_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],) -> Token:
     cur = get_conn().cursor()
-    cur.execute('''SELECT user_id FROM user_table where username = %s''', (username,))
-    data = cur.fetchone()
-    if (data[0] is None):
-        return {"success": False}
+    user = get_user(form_data.username)
+    if user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Username already exists",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    username = form_data.username
+    password = password_hash.hash(form_data.password)
+    name = form_data.name
+    cur.execute('''INSERT INTO user_table(username, password, full_name) VALUES(%s, %s, %s)''', (username, password, name))
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    return Token(access_token=access_token, token_type="bearer")
+    
