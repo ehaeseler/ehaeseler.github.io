@@ -30,7 +30,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard user={user} />}></Route>
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={setUser}/>}></Route>
-        <Route path="/register" element={<Register onRegister={setUser}/>}></Route>
+        <Route path="/register" element={user ? <Navigate to="/" /> :<Register onRegister={setUser}/>}></Route>
       </Routes>
     // </BrowserRouter>
   )
