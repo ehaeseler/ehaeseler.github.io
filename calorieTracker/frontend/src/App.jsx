@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import Login from "./Login.jsx"
 import Dashboard from "./Dashboard.jsx"
+import Register from "./Register.jsx"
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 
@@ -29,7 +30,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard user={user} />}></Route>
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={setUser}/>}></Route>
-        <Route path="/register" element={<Register />}></Route>
+        <Route path="/register" element={<Register onRegister={setUser}/>}></Route>
       </Routes>
     // </BrowserRouter>
   )

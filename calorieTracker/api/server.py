@@ -63,9 +63,13 @@ class User(BaseModel):
     username: str
     full_name: str
 
-
 class UserInDB(User):
     hashed_password: str
+
+class RegisterRequest(BaseModel):
+    username: str
+    password: str
+    full_name: str
 
 def verify_password(plain_password, hashed_password):
     return password_hash.verify(plain_password, hashed_password)
@@ -143,20 +147,28 @@ async def read_users_me(
     ) -> User:
     return current_user
 
-@app.get("/register")
-def register_user(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],) -> Token:
+@app.post("/register")
+def register_user(register_data: RegisterRequest) -> Token:
     cur = get_conn().cursor()
-    user = get_user(form_data.username)
-    if user:
+    username = register_data.username
+    password = password_hash.hash(register_data.password)
+    full_name = register_data.full_name
+    try:
+        cur.execute('''INSERT INTO user_table(username, passw, full_name) VALUES(%s, %s, %s)''', (username, password, full_name))
+        get_conn().commit()
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+        data={"sub": username}, expires_delta=access_token_expires
+        )
+        return Token(access_token=access_token, token_type="bearer")
+    except:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=400,
             detail="Username already exists",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    username = form_data.username
-    password = password_hash.hash(form_data.password)
-    name = form_data.name
-    cur.execute('''INSERT INTO user_table(username, password, full_name) VALUES(%s, %s, %s)''', (username, password, name))
+
+        
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires

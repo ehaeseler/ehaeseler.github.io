@@ -17,16 +17,29 @@ function Register({onRegister}) {
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
         const name = nameRef.current.value;
-        const body = new URLSearchParams();
-        body.append("username", username);
-        body.append("password", password);
-        body.append("name", name);
-        const res = await fetch(`http://127.0.0.1:8000/token`,
+        // const body = new URLSearchParams();
+        // body.append("username", username);
+        // body.append("password", password);
+        // body.append("full_name", name);
+        const res = await fetch(`http://127.0.0.1:8000/register`,
             {
-                method: "POST", headers: {"Content-Type" : "application/x-www-form-urlencoded"},
-                body: body
+                method: "POST", headers: {"Content-Type" : "application/json"},
+                body: JSON.stringify({"username": username, "password": password, "full_name": name})
             });
             const data = await res.json();
+            if (!res.ok) {
+                setError("Username is already taken")
+                return;
+            }
+            sessionStorage.setItem("token", data.access_token);
+
+            const resp = await fetch("http://127.0.0.1:8000/users/me", {
+                method: "GET",
+                headers: {"Authorization": `Bearer ${data.access_token}`}
+            });
+            const userData = await resp.json();
+            onRegister(userData);
+            navigate("/")
     }
 
 
@@ -54,3 +67,5 @@ function Register({onRegister}) {
         </>
     )
 }
+
+export default Register
