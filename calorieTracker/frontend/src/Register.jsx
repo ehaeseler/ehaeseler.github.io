@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom'
 
 import './App.css'
-
+// Make sure there is no null values in the username and password
 function Register({onRegister}) {
     const usernameRef = useRef();
     const passwordRef = useRef();
