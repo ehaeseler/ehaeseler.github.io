@@ -17,10 +17,6 @@ function Register({onRegister}) {
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
         const name = nameRef.current.value;
-        // const body = new URLSearchParams();
-        // body.append("username", username);
-        // body.append("password", password);
-        // body.append("full_name", name);
         const res = await fetch(`http://127.0.0.1:8000/register`,
             {
                 method: "POST", headers: {"Content-Type" : "application/json"},

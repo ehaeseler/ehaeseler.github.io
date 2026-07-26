@@ -3,7 +3,7 @@ import './App.css'
 import Login from "./Login.jsx"
 import Dashboard from "./Dashboard.jsx"
 import Register from "./Register.jsx"
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 
 function App() {
@@ -26,19 +26,12 @@ function App() {
   }, [])
 
   return(
-    // <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Dashboard user={user} />}></Route>
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={setUser}/>}></Route>
-        <Route path="/register" element={user ? <Navigate to="/" /> :<Register onRegister={setUser}/>}></Route>
-      </Routes>
-    // </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Dashboard user={user} />}></Route>
+      <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={setUser}/>}></Route>
+      <Route path="/register" element={user ? <Navigate to="/" /> :<Register onRegister={setUser}/>}></Route>
+    </Routes>
   )
-  
-  // if(user) {
-  //   return <div>Dashboard coming soon</div>;
-  // }
-  // return <Login onLogin={setUser}></Login>
 }
 
 export default App
