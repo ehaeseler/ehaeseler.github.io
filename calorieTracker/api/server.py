@@ -11,6 +11,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 import jwt
 from jwt.exceptions import InvalidTokenError
+from datetime import date
 
 
 
@@ -70,6 +71,9 @@ class RegisterRequest(BaseModel):
     username: str
     password: str
     full_name: str
+
+class FoodData(BaseModel):
+    calories: int
 
 def verify_password(plain_password, hashed_password):
     return password_hash.verify(plain_password, hashed_password)
@@ -168,6 +172,15 @@ def register_user(register_data: RegisterRequest) -> Token:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+@app.post("/calories")
+def add_calories(current_user: Annotated[User, Depends(get_current_active_user)], food_data: FoodData):
+    cur = get_conn().cursor()
+
+    uid = current_user.user_id
+    current_date = date.today()
+    calories = food_data.calories
+    cur.execute('''INSERT INTO daily_calories(user_id, date, calories) VALUES (%s, %s, %s)
+                ON CONFLICT (user_id, date) DO UPDATE SET calories = daily_calories.calories + EXCLUDED.calories''', (uid, current_date, calories))
 
 
     
