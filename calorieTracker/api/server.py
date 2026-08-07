@@ -6,7 +6,7 @@ from pwdlib import PasswordHash
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 import jwt
@@ -57,23 +57,23 @@ class Token(BaseModel):
     token_type: str
 
 class TokenData(BaseModel):
-    username: str | None = None
+    username: str 
 
 class User(BaseModel):
     user_id: int
-    username: str
-    full_name: str
+    username: str 
+    full_name: str 
 
 class UserInDB(User):
     hashed_password: str
 
 class RegisterRequest(BaseModel):
-    username: str
-    password: str
-    full_name: str
+    username: str = Field(min_length=1)
+    password: str = Field(min_length=1)
+    full_name: str = Field(min_length=1)
 
 class FoodData(BaseModel):
-    calories: int
+    calories: int = Field(gt=0)
 
 def verify_password(plain_password, hashed_password):
     return password_hash.verify(plain_password, hashed_password)
@@ -179,8 +179,21 @@ def add_calories(current_user: Annotated[User, Depends(get_current_active_user)]
     uid = current_user.user_id
     current_date = date.today()
     calories = food_data.calories
-    cur.execute('''INSERT INTO daily_calories(user_id, date, calories) VALUES (%s, %s, %s)
+    try:
+        cur.execute('''INSERT INTO daily_calories(user_id, date, calories) VALUES (%s, %s, %s)
                 ON CONFLICT (user_id, date) DO UPDATE SET calories = daily_calories.calories + EXCLUDED.calories''', (uid, current_date, calories))
+        get_conn().commit()
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=500,
+            detail="Incorrect DB entry",
+        )
 
-
+# To Fix: make sure usernames are between 4 and 10 characters
+# Make sure passwords are longer than 8 characters
+# 
+# To Add: make add calories modal work properly
+# Make profile adjustment
+# Make new jsx file for calorie graph using datetime strftime("%A, %m/%d")
     
