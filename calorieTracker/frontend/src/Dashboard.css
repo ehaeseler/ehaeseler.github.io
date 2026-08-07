@@ -13,8 +13,12 @@ body {
     padding: 1rem 2rem;
 }
 
-/* .profile-dropdown {
-    width: 200%
-    font-size: 5px;
-} */
+.calorieButton {
+    background: rgb(178, 178, 178) !important;
+    border: none !important;
+    border-radius: 25px !important;
+    color: white !important;
+    padding: 10px 25px !important;
+    font-size: 50px !important;
+}
 
