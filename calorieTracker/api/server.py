@@ -68,8 +68,8 @@ class UserInDB(User):
     hashed_password: str
 
 class RegisterRequest(BaseModel):
-    username: str = Field(min_length=1)
-    password: str = Field(min_length=1)
+    username: str = Field(min_length=4, max_length=10)
+    password: str = Field(min_length=7, max_length=15)
     full_name: str = Field(min_length=1)
 
 class FoodData(BaseModel):
@@ -190,9 +190,6 @@ def add_calories(current_user: Annotated[User, Depends(get_current_active_user)]
             detail="Incorrect DB entry",
         )
 
-# To Fix: make sure usernames are between 4 and 10 characters
-# Make sure passwords are longer than 8 characters
-# 
 # To Add: make add calories modal work properly
 # Make profile adjustment
 # Make new jsx file for calorie graph using datetime strftime("%A, %m/%d")

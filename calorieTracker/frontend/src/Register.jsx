@@ -10,7 +10,9 @@ function Register({onRegister}) {
     const usernameRef = useRef();
     const passwordRef = useRef();
     const nameRef = useRef();
-    const [error, setError] = useState("");
+    const [userError, setUserError] = useState("");
+    const [passError, setPassError] = useState("");
+    const [nameError, setNameError] = useState("");
     const navigate = useNavigate()
 
     async function handleRegister() {
@@ -23,8 +25,34 @@ function Register({onRegister}) {
                 body: JSON.stringify({"username": username, "password": password, "full_name": name})
             });
             const data = await res.json();
+            setUserError("")
+            setPassError("")
+            setNameError("")
             if (!res.ok) {
-                setError("Username is already taken")
+                console.log(res)
+                console.log(data)
+                if (res.status === 400) {
+                    setUserError("Username is already taken");
+                    return;
+                }
+                for (let i = 0; i < data.detail.length; i++) {
+                    const type = data.detail[i].loc[1]
+                    if (type === "username") {
+                        const message = data.detail[i].msg
+                        const newMessage = message.replace("String", "Username")
+                        setUserError(newMessage)
+                    }
+                    if (type === "password") {
+                        const message = data.detail[i].msg
+                        const newMessage = message.replace("String", "Password")
+                        setPassError(newMessage)
+                    }
+                    if (type === "full_name") {
+                        const message = data.detail[i].msg
+                        const newMessage = message.replace("String", "Full Name")
+                        setNameError(newMessage)
+                    }
+                }
                 return;
             }
             sessionStorage.setItem("token", data.access_token);
@@ -45,18 +73,22 @@ function Register({onRegister}) {
                 <InputGroup.Text id="userInput">Username:</InputGroup.Text>
                 <Form.Control ref={usernameRef}></Form.Control>
             </InputGroup>
+            
+            <p id="userError">{userError}</p>
 
             <InputGroup className="mb-3">
                 <InputGroup.Text id="passInput">Password:</InputGroup.Text>
                 <Form.Control ref={passwordRef}></Form.Control>
             </InputGroup>
 
+            <p id="passError">{passError}</p>
+
             <InputGroup className="mb-3">
                 <InputGroup.Text id="nameInput">Full Name:</InputGroup.Text>
                 <Form.Control ref={nameRef}></Form.Control>
             </InputGroup>
 
-            <p id="userPassError">{error}</p>
+            <p id="nameError">{nameError}</p>
 
             <Button onClick={handleRegister}>Submit</Button>
         
