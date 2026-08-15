@@ -3,11 +3,12 @@ import './App.css'
 import Login from "./Login.jsx"
 import Dashboard from "./Dashboard.jsx"
 import Register from "./Register.jsx"
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 
 function App() {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function restoreSession() {
@@ -19,6 +20,11 @@ function App() {
               method: "GET", headers: {"Authorization": `Bearer ${userToken}`}
           });
           const userData = await res.json();
+          if (!res.ok) {
+            sessionStorage.removeItem("token");
+            navigate("/login");
+            return;
+          }
           setUser(userData);
       }
     }

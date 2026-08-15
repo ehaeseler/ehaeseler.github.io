@@ -8,12 +8,16 @@ import { useNavigate } from 'react-router-dom'
 import './Dashboard.css'
 
 function Dashboard({user}) {
-    const [show, setShow] = useState(false);
+    const [showCalorie, setShowCalorie] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
     const navigate = useNavigate()
     const calorieRef = useRef()
+    const [error, setError] = useState("");
 
-    const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
+    const handleShowCalorie = () => setShowCalorie(true);
+    const handleCloseCalorie = () => setShowCalorie(false);
+    const handleShowProfile = () => setShowProfile(true);
+    const handleCloseProfile = () => setShowProfile(false);
 
     
     useEffect(() =>{
@@ -33,13 +37,29 @@ function Dashboard({user}) {
 
     async function handleCalories() {
         const calories = calorieRef.current.value;
+        const token = sessionStorage.getItem("token")
 
         const res = await fetch("http://127.0.0.1:8000/calories",
             {
-                method: "POST", headers: {"Content-Type" : "application/json"},
-                body: JSON.stringify({"calories": calories})
+                method: "POST", headers: {"Content-Type": "application/json", "Authorization" : `Bearer ${token}`},
+                body: JSON.stringify({"calories": parseInt(calories)})
             }
         )
+        const data = await res.json();
+        console.log(res);
+        console.log(data);
+        if (!res.ok) {
+            if(res.status === 401) {
+                sessionStorage.removeItem("token")
+                navigate("/login")
+                return;
+            }
+            const message = data.detail[0].msg;
+            setError(message)
+            console.log(message)
+            return;
+        }
+        handleClose()
     }
 
     return (
@@ -57,8 +77,8 @@ function Dashboard({user}) {
                 </Dropdown>
             </div>
             <div className="calorieTracker">
-                <Button className="calorieButton" onClick={handleShow}>Add Calories</Button> 
-                <Modal show={show} onHide={handleClose}>
+                <Button className="calorieButton" onClick={handleShowCalorie}>Add Calories</Button> 
+                <Modal show={showCalorie} onHide={handleCloseCalorie}>
                     <Modal.Header closeButton>
                         <Modal.Title>Add Calories</Modal.Title>
                     </Modal.Header>
@@ -67,9 +87,10 @@ function Dashboard({user}) {
                             <InputGroup.Text id="calorieInput">Calories:</InputGroup.Text>
                             <Form.Control ref={calorieRef}></Form.Control>
                         </InputGroup>
+                        <p className="calorieError">{error}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleClose}> Save Changes</Button>
+                        <Button variant="primary" onClick={handleCalories}> Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
             </div>
