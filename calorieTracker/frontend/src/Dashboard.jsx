@@ -10,8 +10,12 @@ import './Dashboard.css'
 function Dashboard({user}) {
     const [showCalorie, setShowCalorie] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
-    const navigate = useNavigate()
-    const calorieRef = useRef()
+    const navigate = useNavigate();
+    const calorieRef = useRef();
+    const nameRef = useRef();
+    const usernameRef = useRef();
+    const passRef = useRef();
+    const passCheckRef = useRef();
     const [error, setError] = useState("");
 
     const handleShowCalorie = () => setShowCalorie(true);
@@ -62,20 +66,56 @@ function Dashboard({user}) {
         handleClose()
     }
 
+    async function handleProfileChange() {
+
+    }
+
     return (
         <>
             <div className="header">
                 <h1>Welcome {user.full_name}</h1>
+
                 <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-basic" className="profile-dropdown" size="lg">
                         Profile
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
+                        <Dropdown.Item onClick={handleShowProfile}>
+                        </Dropdown.Item>
                         <Dropdown.Item onClick={handleLogout}>Log Out</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
+
+                <Modal show={showProfile} onHide={handleCloseProfile}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit Profile</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <InputGroup>
+                            <InputGroup.Text id="nameInput">Name</InputGroup.Text>
+                            <Form.Control ref={calorieRef}></Form.Control>
+                        </InputGroup>
+                        <InputGroup>
+                            <InputGroup.Text id="usernameInput">Username</InputGroup.Text>
+                            <Form.Control ref={calorieRef} placeholder={user.username}></Form.Control>
+                        </InputGroup>
+                        <InputGroup>
+                            <InputGroup.Text id="passwordInput">Username</InputGroup.Text>
+                            <Form.Control ref={calorieRef}></Form.Control>
+                        </InputGroup>
+                        <InputGroup>
+                            <InputGroup.Text id="passwordCheckInput">Username</InputGroup.Text>
+                            <Form.Control ref={calorieRef}></Form.Control>
+                        </InputGroup>
+                        <p className="calorieError">{error}</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={handleCalories}> Save Changes</Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
+
             <div className="calorieTracker">
                 <Button className="calorieButton" onClick={handleShowCalorie}>Add Calories</Button> 
                 <Modal show={showCalorie} onHide={handleCloseCalorie}>
