@@ -1,0 +1,36 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10rem;
+}
+
+.name {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border: solid black;
+}
+
+.textButton {
+    display: flex;
+    gap: 10rem
+}
+
+.errorMessage {
+    color: red;
+}
+
+.originalName {
+    padding-top: 1rem;
+    font-size: larger;   
+}
+
+.changeButton {
+    width: 200%;
+    height: 100%;
+}

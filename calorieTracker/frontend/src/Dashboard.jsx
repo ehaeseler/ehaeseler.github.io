@@ -7,30 +7,23 @@ import Modal from 'react-bootstrap/Modal'
 import { useNavigate } from 'react-router-dom'
 import './Dashboard.css'
 
-function Dashboard({user}) {
+function Dashboard({user, isLoading}) {
     const [showCalorie, setShowCalorie] = useState(false);
-    const [showProfile, setShowProfile] = useState(false);
     const navigate = useNavigate();
     const calorieRef = useRef();
-    const nameRef = useRef();
-    const usernameRef = useRef();
-    const passRef = useRef();
-    const passCheckRef = useRef();
     const [error, setError] = useState("");
 
     const handleShowCalorie = () => setShowCalorie(true);
     const handleCloseCalorie = () => setShowCalorie(false);
-    const handleShowProfile = () => setShowProfile(true);
-    const handleCloseProfile = () => setShowProfile(false);
 
     
     useEffect(() =>{
-        if (!user) {
+        if (!user && !isLoading) {
             navigate("/login");
         }
-    }, [user]);
+    }, [user, isLoading]);
 
-    if (!user) {
+    if (!user || isLoading) {
         return null
     }
 
@@ -66,10 +59,6 @@ function Dashboard({user}) {
         handleClose()
     }
 
-    async function handleProfileChange() {
-
-    }
-
     return (
         <>
             <div className="header">
@@ -81,39 +70,10 @@ function Dashboard({user}) {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={handleShowProfile}>
-                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => navigate("/profile")}>Profile</Dropdown.Item>
                         <Dropdown.Item onClick={handleLogout}>Log Out</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
-
-                <Modal show={showProfile} onHide={handleCloseProfile}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit Profile</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <InputGroup>
-                            <InputGroup.Text id="nameInput">Name</InputGroup.Text>
-                            <Form.Control ref={calorieRef}></Form.Control>
-                        </InputGroup>
-                        <InputGroup>
-                            <InputGroup.Text id="usernameInput">Username</InputGroup.Text>
-                            <Form.Control ref={calorieRef} placeholder={user.username}></Form.Control>
-                        </InputGroup>
-                        <InputGroup>
-                            <InputGroup.Text id="passwordInput">Username</InputGroup.Text>
-                            <Form.Control ref={calorieRef}></Form.Control>
-                        </InputGroup>
-                        <InputGroup>
-                            <InputGroup.Text id="passwordCheckInput">Username</InputGroup.Text>
-                            <Form.Control ref={calorieRef}></Form.Control>
-                        </InputGroup>
-                        <p className="calorieError">{error}</p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary" onClick={handleCalories}> Save Changes</Button>
-                    </Modal.Footer>
-                </Modal>
             </div>
 
             <div className="calorieTracker">
@@ -130,7 +90,7 @@ function Dashboard({user}) {
                         <p className="calorieError">{error}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleCalories}> Save Changes</Button>
+                        <Button variant="primary" onClick={handleCalories}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

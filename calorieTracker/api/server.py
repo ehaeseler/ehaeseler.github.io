@@ -189,6 +189,11 @@ def add_calories(current_user: Annotated[User, Depends(get_current_active_user)]
             status_code=500,
             detail="Incorrect DB entry",
         )
+    
+@app.put("/profilename")
+def change_profile_name(current_user: Annotated[User, Depends(get_current_active_user)]):
+    cur = get_conn().cursor()
+    name = current_user.full_name
 
 # To Add: make add calories modal work properly
 # Make profile adjustment
