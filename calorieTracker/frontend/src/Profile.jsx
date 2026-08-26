@@ -35,13 +35,21 @@ function Profile({user, isLoading}) {
         return null
     }
 
-    async function handleChangeName() {
+    async function handleChangeProfile() {
         const newName = nameRef.current.value;
-        const name = user.full_name;
+        const newUsername = usernameRef.current.value;
+        const newPassword = passRef.current.value;
+        const newPasswordCheck = passCheckRef.current.value;
+        const token = sessionStorage.getItem("token")
 
-        // const res = await fetch("http://127.0.0.1:8000/profilename") {
+        const res = await fetch("http://127.0.0.1:8000/profile",
+            {
+                method: "PATCH", headers: {"Content-Type" : "application/json", "Authorization": `Bearer ${token}`},
+                body: JSON.stringify({"username": newUsername, "full_name": newName, "password": newPassword, "password_check": newPasswordCheck})
+            }
+        )
 
-        // }
+        handleCloseName()
     }
 
 
@@ -65,10 +73,10 @@ function Profile({user, isLoading}) {
                             <InputGroup.Text id="nameInput">Name</InputGroup.Text>
                             <Form.Control ref={nameRef}></Form.Control>
                         </InputGroup>
-                        <p classname="nameError">{nameError}</p>
+                        <p className="nameError">{nameError}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleChangeName}>Save Changes</Button>
+                        <Button variant="primary" onClick={handleChangeProfile}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
 

@@ -32,6 +32,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+ALLOWED_FIELDS = ["full_name", "username", "password"]
 
 DUMMY_HASH = password_hash.hash("dummypassword")
 
@@ -71,6 +72,12 @@ class RegisterRequest(BaseModel):
     username: str = Field(min_length=4, max_length=10)
     password: str = Field(min_length=7, max_length=15)
     full_name: str = Field(min_length=1)
+
+class ChangeProfile(BaseModel):
+    username: str | None = Field(default = None, min_length=4, max_length=10)
+    full_name: str | None = Field(default = None, min_length=1)
+    password: str | None = Field(default = None, min_length=7, max_length=15)
+    password_check: str | None = Field(default = None, min_length=1)
 
 class FoodData(BaseModel):
     calories: int = Field(gt=0)
@@ -190,12 +197,34 @@ def add_calories(current_user: Annotated[User, Depends(get_current_active_user)]
             detail="Incorrect DB entry",
         )
     
-@app.put("/profilename")
-def change_profile_name(current_user: Annotated[User, Depends(get_current_active_user)]):
+def check_field(field):
+    if (field not in ALLOWED_FIELDS):
+        raise HTTPException(
+            status_code=400,
+            detail="Incorrect field",
+        )
+    return True
+    
+@app.patch("/profile")
+def change_profile_name(current_user: Annotated[User, Depends(get_current_active_user)], profile_update: ChangeProfile):
     cur = get_conn().cursor()
-    name = current_user.full_name
+    uid = current_user.user_id
+    profile_data = profile_update.model_dump(exclude_none = True)
+    field = next(iter(profile_data))
+    check_field(field)
+    data = next(iter(profile_data.values()))
 
-# To Add: make add calories modal work properly
+    try:
+        cur.execute(f'''UPDATE user_table SET {field} = %s WHERE user_id = %s''', (data, uid))
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=500,
+            detail="Incorrect DB entry",
+        )
+
+
+
 # Make profile adjustment
 # Make new jsx file for calorie graph using datetime strftime("%A, %m/%d")
     
