@@ -42,12 +42,22 @@ function Profile({user, isLoading}) {
         const newPasswordCheck = passCheckRef.current.value;
         const token = sessionStorage.getItem("token")
 
+        const rawData = {
+            username: newUsername,
+            full_name: newName,
+            password: newPassword,
+            password_check: newPasswordCheck
+        };
+
+        const updatedData = Object.fromEntries(Object.entries(rawData).filter(([key, value]) => value.length > 0));
+
         const res = await fetch("http://127.0.0.1:8000/profile",
             {
                 method: "PATCH", headers: {"Content-Type" : "application/json", "Authorization": `Bearer ${token}`},
-                body: JSON.stringify({"username": newUsername, "full_name": newName, "password": newPassword, "password_check": newPasswordCheck})
+                body: JSON.stringify(updatedData)
             }
         )
+        nameRef.current.value = newName;
 
         handleCloseName()
     }

@@ -210,12 +210,22 @@ def change_profile_name(current_user: Annotated[User, Depends(get_current_active
     cur = get_conn().cursor()
     uid = current_user.user_id
     profile_data = profile_update.model_dump(exclude_none = True)
-    field = next(iter(profile_data))
+    fields = list(profile_data)
+    data = list(profile_data.values())
+    field = fields[0]
     check_field(field)
-    data = next(iter(profile_data.values()))
+    newData = data[0]
+    if (len(data) > 1): nextData = data[1]
+    print(field, newData)
+
+    if (field == "password" and nextData != newData):
+        raise HTTPException(
+            status_code=400,
+            detail="Password and Check do not match"
+        )
 
     try:
-        cur.execute(f'''UPDATE user_table SET {field} = %s WHERE user_id = %s''', (data, uid))
+        cur.execute(f'''UPDATE user_table SET {field} = %s WHERE user_id = %s''', (data[0], uid))
     except Exception as e:
         print(e)
         raise HTTPException(
