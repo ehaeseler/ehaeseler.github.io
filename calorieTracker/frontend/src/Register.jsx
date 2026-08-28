@@ -28,8 +28,6 @@ function Register({onRegister}) {
             setPassError("")
             setNameError("")
             if (!res.ok) {
-                console.log(res)
-                console.log(data)
                 if (res.status === 400) {
                     setUserError("Username is already taken");
                     return;

@@ -212,11 +212,21 @@ def change_profile_name(current_user: Annotated[User, Depends(get_current_active
     profile_data = profile_update.model_dump(exclude_none = True)
     fields = list(profile_data)
     data = list(profile_data.values())
-    field = fields[0]
-    check_field(field)
-    newData = data[0]
-    if (len(data) > 1): nextData = data[1]
-    print(field, newData)
+    try:
+        field = fields[0]
+        check_field(field)
+        newData = data[0]
+        if (len(data) > 1): nextData = data[1]
+        print(field, newData)
+        print(data[0])
+        print(uid)
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=422,
+            detail="Input cannot be null",
+        )
+
 
     if (field == "password" and nextData != newData):
         raise HTTPException(
@@ -226,6 +236,7 @@ def change_profile_name(current_user: Annotated[User, Depends(get_current_active
 
     try:
         cur.execute(f'''UPDATE user_table SET {field} = %s WHERE user_id = %s''', (data[0], uid))
+        get_conn().commit()
     except Exception as e:
         print(e)
         raise HTTPException(
