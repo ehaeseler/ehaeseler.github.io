@@ -243,6 +243,13 @@ def change_profile_name(current_user: Annotated[User, Depends(get_current_active
             status_code=500,
             detail="Incorrect DB entry",
         )
+    
+    if (field == "username"):
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        new_token = create_access_token(data={"sub": newData}, expires_delta=access_token_expires)
+        print(new_token)
+
+    return {"success": True, "access_token": new_token if field == "username" else None}
 
 
 

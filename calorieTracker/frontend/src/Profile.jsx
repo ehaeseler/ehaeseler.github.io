@@ -18,7 +18,9 @@ function Profile({user, isLoading, setUser}) {
     const [showPassword, setShowPassword] = useState(false);
     const [dbError, setDbError] = useState("");
     const [nameError, setNameError] = useState("");
-    const [userError, setUserError] = useState("");
+    const [usernameError, setUsernameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [passCheckError, setPassCheckError] = useState("");
 
 
     const handleShowName = () => setShowName(true);
@@ -38,53 +40,37 @@ function Profile({user, isLoading, setUser}) {
         return null
     }
 
-    async function handleChangeProfile() {
+    async function handleChangeName() {
         const newName = nameRef.current.value;
-        const newUsername = usernameRef.current.value;
-        const newPassword = passRef.current.value;
-        const newPasswordCheck = passCheckRef.current.value;
         const token = sessionStorage.getItem("token")
 
         const rawData = {
-            username: newUsername,
-            full_name: newName,
-            password: newPassword,
-            password_check: newPasswordCheck
+            full_name: newName
         };
-
-        const updatedData = Object.fromEntries(Object.entries(rawData).filter(([key, value]) => value.length > 0));
-        const keys = Object.keys(updatedData)
 
         const res = await fetch("http://127.0.0.1:8000/profile",
             {
                 method: "PATCH", headers: {"Content-Type" : "application/json", "Authorization": `Bearer ${token}`},
-                body: JSON.stringify(updatedData)
+                body: JSON.stringify(rawData)
             }
         )
         const data = await res.json();
         if (!res.ok) {
-            setUserError("")
-            // setPassError("")
-            setNameError("")
-            // if (res.status === 400) {
-            //     setPassCheck
-            // }
+            setNameError("");
             if (res.status === 500) {
-                const message = data.detail[i].msg;
+                const message = data.detail[0].msg;
                 const newMessage = message.replace("String", "Input");
                 setNameError(newMessage);
             }
-            if (keys[0] === undefined) {
-                const message = data.detail[i].msg;
-                setNameError(message);
-                setUserError(message);
-                //password error
-                //pass check error
-            }
-            if (keys[0] === "full_name") {
-                const message = data.detail[i].msg;
+            if (rawData.full_name.length === 0) {
+                const message = data.detail;
                 setNameError(message);
             }
+            if (res.status === 422) {
+                const message = data.detail[0].msg;
+                setNameError(message);
+            }
+            return;
         }
         const meRes = await fetch("http://127.0.0.1:8000/users/me", {
             method: "GET",
@@ -92,8 +78,100 @@ function Profile({user, isLoading, setUser}) {
         });
         const userData = await meRes.json();
         setUser(userData);
-
+        setNameError("");
         handleCloseName()
+    }
+
+    async function handleChangeUsername() {
+        const newUsername = usernameRef.current.value;
+        const token = sessionStorage.getItem("token")
+
+        const rawData = {
+            username: newUsername
+        };
+
+        const res = await fetch("http://127.0.0.1:8000/profile",
+            {
+                method: "PATCH", headers: {"Content-Type" : "application/json", "Authorization": `Bearer ${token}`},
+                body: JSON.stringify(rawData)
+            }
+        )
+        const data = await res.json();
+        console.log(res);
+        console.log(data);
+        if (!res.ok) {
+            setUsernameError("");
+            if (res.status === 500) {
+                const message = data.detail[0].msg;
+                const newMessage = message.replace("String", "Input");
+                setUsernameError(newMessage);
+            }
+            if (rawData.username.length === 0) {
+                const message = data.detail;
+                setUsernameError(message);
+            }
+            if (res.status === 422) {
+                const message = data.detail[0].msg;
+                setUsernameError(message);
+            }
+            return;
+        }
+        const newToken = data.access_token;
+        sessionStorage.setItem("token", newToken);
+        const meRes = await fetch("http://127.0.0.1:8000/users/me", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${newToken}` }
+        });
+        const userData = await meRes.json();
+        setUser(userData);
+        setUsernameError("");
+        handleCloseUsername()
+    }
+
+    async function handleChangePassword() {
+        const newPassword = passRef.current.value;
+        const newPassCheck = passCheckRef.current.value;
+        const token = sessionStorage.getItem("token")
+
+        const rawData = {
+            password: newPassword,
+            passCheck: newPassCheck
+        };
+
+        const res = await fetch("http://127.0.0.1:8000/profile",
+            {
+                method: "PATCH", headers: {"Content-Type" : "application/json", "Authorization": `Bearer ${token}`},
+                body: JSON.stringify(rawData)
+            }
+        )
+        const data = await res.json();
+        console.log(res);
+        console.log(data);
+        if (!res.ok) {
+            setPasswordError("");
+            if (res.status === 500) {
+                const message = data.detail[0].msg;
+                const newMessage = message.replace("String", "Input");
+                setPasswordError(newMessage);
+            }
+            if (rawData.username.length === 0) {
+                const message = data.detail;
+                setPasswordError(message);
+            }
+            if (res.status === 422) {
+                const message = data.detail[0].msg;
+                setPasswordError(message);
+            }
+            return;
+        }
+        const meRes = await fetch("http://127.0.0.1:8000/users/me", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${new_token}` }
+        });
+        const userData = await meRes.json();
+        setUser(userData);
+        setPasswordError("");
+        handleClosePassword()
     }
 
 
@@ -103,7 +181,7 @@ function Profile({user, isLoading, setUser}) {
             <div className="profile">
                 <div className="name">
                     <div className="textButton">
-                        <p className="originalName">{user.full_name}</p>
+                        <p className="originalName">Name</p>
                         <Button className="changeButton" size="sm" onClick={handleShowName}>Edit</Button>
                     </div>
                 </div>
@@ -119,14 +197,14 @@ function Profile({user, isLoading, setUser}) {
                         <p className="nameError">{nameError}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleChangeProfile}>Save Changes</Button>
+                        <Button variant="primary" onClick={handleChangeName}>Save Changes</Button>
                         <p className="dbError">{dbError}</p>
                     </Modal.Footer>
                 </Modal>
 
                 <div className="name">
                     <div className="textButton">
-                        <p className="originalName">{user.username}</p>
+                        <p className="originalName">Username</p>
                         <Button className="changeButton" size="sm" onClick={handleShowUsername}>Edit</Button>
                     </div>
                 </div>
@@ -139,22 +217,41 @@ function Profile({user, isLoading, setUser}) {
                             <InputGroup.Text id="usernameInput">Username</InputGroup.Text>
                             <Form.Control ref={usernameRef} placeholder={user.username}></Form.Control>
                         </InputGroup>
-                        <p className="userError">{userError}</p>
+                        <p className="userError">{usernameError}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleChangeProfile}>Save Changes</Button>
+                        <Button variant="primary" onClick={handleChangeUsername}>Save Changes</Button>
                         <p className="dbError">{dbError}</p>
                     </Modal.Footer>
                 </Modal>
 
-                <InputGroup>
-                    <InputGroup.Text id="passwordInput">Password</InputGroup.Text>
-                    <Form.Control ref={passRef}></Form.Control>
-                </InputGroup>
-                <InputGroup>
-                    <InputGroup.Text id="passwordCheckInput">Re-enter Password</InputGroup.Text>
-                    <Form.Control ref={passCheckRef}></Form.Control>
-                </InputGroup>
+                <div className="name">
+                    <div className="textButton">
+                        <p className="originalName">Password</p>
+                        <Button className="changeButton" size="sm" onClick={handleShowPassword}>Edit</Button>
+                    </div>
+                </div>
+                <Modal show={showPassword} onHide={handleClosePassword}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Change Username</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                    <InputGroup>
+                        <InputGroup.Text id="passwordInput">Password</InputGroup.Text>
+                        <Form.Control ref={passRef}></Form.Control>
+                    </InputGroup>
+                    <p className="passwordError">{passwordError}</p>
+                    <InputGroup>
+                        <InputGroup.Text id="passwordCheckInput">Re-enter Password</InputGroup.Text>
+                        <Form.Control ref={passCheckRef}></Form.Control>
+                    </InputGroup>
+                    <p className="passwordError">{passCheckError}</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={handleChangeUsername}>Save Changes</Button>
+                        <p className="dbError">{dbError}</p>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </>
     )
