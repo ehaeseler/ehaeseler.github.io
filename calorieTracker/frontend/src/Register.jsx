@@ -8,25 +8,34 @@ import './App.css'
 function Register({onRegister}) {
     const usernameRef = useRef();
     const passwordRef = useRef();
+    const passCheckRef = useRef();
     const nameRef = useRef();
     const [userError, setUserError] = useState("");
     const [passError, setPassError] = useState("");
     const [nameError, setNameError] = useState("");
+    const [passCheckError, setPassCheckError] = useState("");
     const navigate = useNavigate()
 
     async function handleRegister() {
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
         const name = nameRef.current.value;
+        const passCheck = passCheckRef.current.value;
+        if (password !== passCheck) {
+            setPassError("Password and Password Check must be the same");
+            setPassCheckError("Password and Password Check must be the same");
+            return;
+        }
         const res = await fetch("http://127.0.0.1:8000/register",
             {
                 method: "POST", headers: {"Content-Type" : "application/json"},
                 body: JSON.stringify({"username": username, "password": password, "full_name": name})
             });
             const data = await res.json();
-            setUserError("")
-            setPassError("")
-            setNameError("")
+            setUserError("");
+            setPassError("");
+            setNameError("");
+            setPassCheckError("");
             if (!res.ok) {
                 if (res.status === 400) {
                     setUserError("Username is already taken");
@@ -67,6 +76,13 @@ function Register({onRegister}) {
     return (
         <>
             <InputGroup className="mb-3">
+                <InputGroup.Text id="nameInput">Full Name:</InputGroup.Text>
+                <Form.Control ref={nameRef}></Form.Control>
+            </InputGroup>
+
+            <p id="nameError">{nameError}</p>
+
+            <InputGroup className="mb-3">
                 <InputGroup.Text id="userInput">Username:</InputGroup.Text>
                 <Form.Control ref={usernameRef}></Form.Control>
             </InputGroup>
@@ -81,14 +97,14 @@ function Register({onRegister}) {
             <p id="passError">{passError}</p>
 
             <InputGroup className="mb-3">
-                <InputGroup.Text id="nameInput">Full Name:</InputGroup.Text>
-                <Form.Control ref={nameRef}></Form.Control>
+                <InputGroup.Text id="passCheckInput">Re-enter Password:</InputGroup.Text>
+                <Form.Control ref={passCheckRef}></Form.Control>
             </InputGroup>
 
-            <p id="nameError">{nameError}</p>
+            <p id="passCheckError">{passCheckError}</p>
+
 
             <Button onClick={handleRegister}>Submit</Button>
-        
         </>
     )
 }

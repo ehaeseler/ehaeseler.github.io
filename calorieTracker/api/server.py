@@ -69,9 +69,9 @@ class UserInDB(User):
     hashed_password: str
 
 class RegisterRequest(BaseModel):
+    full_name: str = Field(min_length=1)
     username: str = Field(min_length=4, max_length=10)
     password: str = Field(min_length=7, max_length=15)
-    full_name: str = Field(min_length=1)
 
 class ChangeProfile(BaseModel):
     username: str | None = Field(default = None, min_length=4, max_length=10)
