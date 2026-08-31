@@ -32,7 +32,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
-ALLOWED_FIELDS = ["full_name", "username", "password"]
+ALLOWED_FIELDS = ["full_name", "username", "passw"]
 
 DUMMY_HASH = password_hash.hash("dummypassword")
 
@@ -76,7 +76,7 @@ class RegisterRequest(BaseModel):
 class ChangeProfile(BaseModel):
     username: str | None = Field(default = None, min_length=4, max_length=10)
     full_name: str | None = Field(default = None, min_length=1)
-    password: str | None = Field(default = None, min_length=7, max_length=15)
+    passw: str | None = Field(default = None, min_length=7, max_length=15)
     password_check: str | None = Field(default = None, min_length=1)
 
 class FoodData(BaseModel):
@@ -206,20 +206,20 @@ def check_field(field):
     return True
     
 @app.patch("/profile")
-def change_profile_name(current_user: Annotated[User, Depends(get_current_active_user)], profile_update: ChangeProfile):
+def change_profile(current_user: Annotated[User, Depends(get_current_active_user)], profile_update: ChangeProfile):
     cur = get_conn().cursor()
     uid = current_user.user_id
     profile_data = profile_update.model_dump(exclude_none = True)
     fields = list(profile_data)
     data = list(profile_data.values())
+    newData = None
+    nextData = None
     try:
         field = fields[0]
         check_field(field)
         newData = data[0]
-        if (len(data) > 1): nextData = data[1]
-        print(field, newData)
-        print(data[0])
-        print(uid)
+        if (len(data) > 1): 
+            nextData = data[1]
     except Exception as e:
         print(e)
         raise HTTPException(
@@ -227,15 +227,18 @@ def change_profile_name(current_user: Annotated[User, Depends(get_current_active
             detail="Input cannot be null",
         )
 
-
-    if (field == "password" and nextData != newData):
-        raise HTTPException(
-            status_code=400,
-            detail="Password and Check do not match"
-        )
+    if (field == "passw"):
+       if (nextData != newData):
+            raise HTTPException(
+                status_code=400,
+                detail="Password and Password Check do not match"
+            )
+       newData = password_hash.hash(newData)
+       
+    
 
     try:
-        cur.execute(f'''UPDATE user_table SET {field} = %s WHERE user_id = %s''', (data[0], uid))
+        cur.execute(f'''UPDATE user_table SET {field} = %s WHERE user_id = %s''', (newData, uid))
         get_conn().commit()
     except Exception as e:
         print(e)
@@ -247,7 +250,6 @@ def change_profile_name(current_user: Annotated[User, Depends(get_current_active
     if (field == "username"):
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         new_token = create_access_token(data={"sub": newData}, expires_delta=access_token_expires)
-        print(new_token)
 
     return {"success": True, "access_token": new_token if field == "username" else None}
 

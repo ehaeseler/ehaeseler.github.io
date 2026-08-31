@@ -134,8 +134,8 @@ function Profile({user, isLoading, setUser}) {
         const token = sessionStorage.getItem("token")
 
         const rawData = {
-            password: newPassword,
-            passCheck: newPassCheck
+            passw: newPassword,
+            password_check: newPassCheck
         };
 
         const res = await fetch("http://127.0.0.1:8000/profile",
@@ -149,12 +149,18 @@ function Profile({user, isLoading, setUser}) {
         console.log(data);
         if (!res.ok) {
             setPasswordError("");
+            setPassCheckError("");
+            if (res.status === 400) {
+                const message = data.detail;
+                setPasswordError(message);
+                setPassCheckError(message);
+            }
             if (res.status === 500) {
                 const message = data.detail[0].msg;
                 const newMessage = message.replace("String", "Input");
                 setPasswordError(newMessage);
             }
-            if (rawData.username.length === 0) {
+            if (rawData.passw.length === 0) {
                 const message = data.detail;
                 setPasswordError(message);
             }
@@ -166,11 +172,12 @@ function Profile({user, isLoading, setUser}) {
         }
         const meRes = await fetch("http://127.0.0.1:8000/users/me", {
             method: "GET",
-            headers: { "Authorization": `Bearer ${new_token}` }
+            headers: { "Authorization": `Bearer ${token}` }
         });
         const userData = await meRes.json();
         setUser(userData);
         setPasswordError("");
+        setPassCheckError("");
         handleClosePassword()
     }
 
@@ -248,7 +255,7 @@ function Profile({user, isLoading, setUser}) {
                     <p className="passwordError">{passCheckError}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleChangeUsername}>Save Changes</Button>
+                        <Button variant="primary" onClick={handleChangePassword}>Save Changes</Button>
                         <p className="dbError">{dbError}</p>
                     </Modal.Footer>
                 </Modal>
