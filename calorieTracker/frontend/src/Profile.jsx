@@ -16,7 +16,6 @@ function Profile({user, isLoading, setUser}) {
     const [showName, setShowName] = useState(false);
     const [showUsername, setShowUsername] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [dbError, setDbError] = useState("");
     const [nameError, setNameError] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
@@ -181,6 +180,10 @@ function Profile({user, isLoading, setUser}) {
         handleClosePassword()
     }
 
+    function toDashboard() {
+        navigate("/")
+    }
+
 
 
     return (
@@ -205,7 +208,6 @@ function Profile({user, isLoading, setUser}) {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleChangeName}>Save Changes</Button>
-                        <p className="dbError">{dbError}</p>
                     </Modal.Footer>
                 </Modal>
 
@@ -228,7 +230,6 @@ function Profile({user, isLoading, setUser}) {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleChangeUsername}>Save Changes</Button>
-                        <p className="dbError">{dbError}</p>
                     </Modal.Footer>
                 </Modal>
 
@@ -256,9 +257,10 @@ function Profile({user, isLoading, setUser}) {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleChangePassword}>Save Changes</Button>
-                        <p className="dbError">{dbError}</p>
                     </Modal.Footer>
                 </Modal>
+
+                <Button id="ReturnButton" onClick={toDashboard}>Back</Button>
             </div>
         </>
     )

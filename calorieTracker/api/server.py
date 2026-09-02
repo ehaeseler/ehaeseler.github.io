@@ -253,8 +253,27 @@ def change_profile(current_user: Annotated[User, Depends(get_current_active_user
 
     return {"success": True, "access_token": new_token if field == "username" else None}
 
+@app.get("/graph")
+def make_graph(current_user: Annotated[User, Depends(get_current_active_user)]):
+    cur = get_conn().cursor()
+    uid = current_user.user_id
+    current_date = date.today()
+    last_week = current_date - timedelta(days = 7)
+
+    try:
+        cur.execute('''SELECT calories, date FROM daily_calories WHERE user_id=%s AND date <= %s AND date >= %s ORDER BY date ASC''', (uid, current_date, last_week))
+        get_conn().commit()
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=500,
+            detail="Could not fetch calories",
+        )
+ 
 
 
-# Make profile adjustment
+
+
+
 # Make new jsx file for calorie graph using datetime strftime("%A, %m/%d")
     

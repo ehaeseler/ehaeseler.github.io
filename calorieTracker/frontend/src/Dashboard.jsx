@@ -5,6 +5,9 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import { useNavigate } from 'react-router-dom'
+import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from 'recharts';
+import strftime from 'strftime'
+
 import './Dashboard.css'
 
 function Dashboard({user, isLoading}) {
@@ -12,6 +15,7 @@ function Dashboard({user, isLoading}) {
     const navigate = useNavigate();
     const calorieRef = useRef();
     const [error, setError] = useState("");
+    const calorieData = [];
 
     const handleShowCalorie = () => setShowCalorie(true);
     const handleCloseCalorie = () => setShowCalorie(false);
@@ -43,8 +47,6 @@ function Dashboard({user, isLoading}) {
             }
         )
         const data = await res.json();
-        console.log(res);
-        console.log(data);
         if (!res.ok) {
             if(res.status === 401) {
                 sessionStorage.removeItem("token")
@@ -53,11 +55,37 @@ function Dashboard({user, isLoading}) {
             }
             const message = data.detail[0].msg;
             setError(message)
-            console.log(message)
             return;
         }
+        handleChart()
         handleClose()
     }
+
+    async function handleChart() {
+        const token = sessionStorage.getItem("token")
+        const res = await fetch ("http://127.0.0.1:8000/graph",
+            {
+                method: "GET", headers: {"Content-Type": "application/json", "Authorization" : `Bearer ${token}`}
+            }
+        )
+        const data2 = await res.json();
+        if (!res.ok) {
+            if(res.status === 401) {
+                sessionStorage.removeItem("token")
+                navigate("/login")
+                return;
+            }
+        }
+        if (data2 === null) {
+            return 
+        }
+        for (let i = 0; i < data2.length; i++) {
+            calorieData.push({"name" : strftime(("%A, %m/%d"), new Date(data2[i].date)), "uv" : data2.calories})
+        }
+    }
+
+    handleChart()
+
 
     return (
         <>
@@ -93,6 +121,14 @@ function Dashboard({user, isLoading}) {
                         <Button variant="primary" onClick={handleCalories}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
+
+                <LineChart style={{ width: '100%', aspectRatio: 1.618, maxWidth: 600 }} responsive data={calorieData}>
+                <CartesianGrid />
+                <Line dataKey="uv" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Legend />
+                </LineChart>
             </div>
         </>
     )
