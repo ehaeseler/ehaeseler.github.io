@@ -96,8 +96,6 @@ function Profile({user, isLoading, setUser}) {
             }
         )
         const data = await res.json();
-        console.log(res);
-        console.log(data);
         if (!res.ok) {
             setUsernameError("");
             if (res.status === 500) {
@@ -144,8 +142,6 @@ function Profile({user, isLoading, setUser}) {
             }
         )
         const data = await res.json();
-        console.log(res);
-        console.log(data);
         if (!res.ok) {
             setPasswordError("");
             setPassCheckError("");

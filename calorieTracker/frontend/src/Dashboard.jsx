@@ -5,17 +5,40 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import { useNavigate } from 'react-router-dom'
-import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from 'recharts';
-import strftime from 'strftime'
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+  } from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
 
 import './Dashboard.css'
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+  );
 
 function Dashboard({user, isLoading}) {
     const [showCalorie, setShowCalorie] = useState(false);
     const navigate = useNavigate();
     const calorieRef = useRef();
     const [error, setError] = useState("");
-    const calorieData = [];
+    const [calorieData, setCalorieData] = useState([]);
+    const [labels, setLabels] = useState([]);
 
     const handleShowCalorie = () => setShowCalorie(true);
     const handleCloseCalorie = () => setShowCalorie(false);
@@ -26,6 +49,10 @@ function Dashboard({user, isLoading}) {
             navigate("/login");
         }
     }, [user, isLoading]);
+
+    useEffect(() =>{
+        handleChart();
+    }, []);
 
     if (!user || isLoading) {
         return null
@@ -57,7 +84,7 @@ function Dashboard({user, isLoading}) {
             setError(message)
             return;
         }
-        handleChart()
+        await handleChart()
         handleClose()
     }
 
@@ -77,14 +104,50 @@ function Dashboard({user, isLoading}) {
             }
         }
         if (data2 === null) {
-            return 
+            return ;
         }
-        for (let i = 0; i < data2.length; i++) {
-            calorieData.push({"name" : strftime(("%A, %m/%d"), new Date(data2[i].date)), "uv" : data2.calories})
+        const dates = [];
+
+        for (let i = 0; i < 14; i += 2) {
+            dates.push(data2[i]);
         }
+        setLabels(dates);
+
+        const calories = [];
+
+        for (let i = 1; i < 14; i += 2) {
+            calories.push(data2[i]);
+        }
+        setCalorieData(calories)
     }
 
-    handleChart()
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            title: { display: true, text: 'Wekly Calories' },
+        },
+        scales: {
+            y: { 
+              min: 0,
+              max: 5000
+            }
+          }
+    };
+
+
+    const data = {
+        labels,
+        datasets: [
+          {
+            data: calorieData,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          },
+        ],
+      };
+
 
 
     return (
@@ -121,14 +184,9 @@ function Dashboard({user, isLoading}) {
                         <Button variant="primary" onClick={handleCalories}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
-
-                <LineChart style={{ width: '100%', aspectRatio: 1.618, maxWidth: 600 }} responsive data={calorieData}>
-                <CartesianGrid />
-                <Line dataKey="uv" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Legend />
-                </LineChart>
+                <div style={{ width: '90%', height: '50vh' }}>
+                    <Line options={options} data={data}></Line>
+                </div>
             </div>
         </>
     )

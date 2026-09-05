@@ -11,7 +11,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 import jwt
 from jwt.exceptions import InvalidTokenError
-from datetime import date
+from datetime import date, datetime
 
 
 
@@ -257,18 +257,25 @@ def change_profile(current_user: Annotated[User, Depends(get_current_active_user
 def make_graph(current_user: Annotated[User, Depends(get_current_active_user)]):
     cur = get_conn().cursor()
     uid = current_user.user_id
-    current_date = date.today()
-    last_week = current_date - timedelta(days = 7)
+    date_list = []
+    initialDate = date.today()-timedelta(days=7)
+    calorie_list = []
 
-    try:
-        cur.execute('''SELECT calories, date FROM daily_calories WHERE user_id=%s AND date <= %s AND date >= %s ORDER BY date ASC''', (uid, current_date, last_week))
-        get_conn().commit()
-    except Exception as e:
-        print(e)
-        raise HTTPException(
-            status_code=500,
-            detail="Could not fetch calories",
-        )
+    for i in range(7):
+        date_list.append(initialDate+timedelta(days=i))
+    
+
+    for i in range(7):
+        cur.execute('''SELECT calories FROM daily_calories WHERE user_id=%s AND date = %s''', (uid, date_list[i]))
+        calories = cur.fetchone()
+        if (calories is None):
+            calorie_list.append(date_list[i].strftime("%A, %m/%d"))
+            calorie_list.append(0)
+        else:
+            calorie_list.append(date_list[i].strftime("%A, %m/%d"))
+            calorie_list.append(calories[0])
+    get_conn().commit()
+    return calorie_list
  
 
 
