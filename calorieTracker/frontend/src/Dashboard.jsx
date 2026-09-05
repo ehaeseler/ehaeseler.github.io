@@ -85,7 +85,7 @@ function Dashboard({user, isLoading}) {
             return;
         }
         await handleChart()
-        handleClose()
+        handleCloseCalorie()
     }
 
     async function handleChart() {

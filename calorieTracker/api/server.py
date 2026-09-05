@@ -258,21 +258,20 @@ def make_graph(current_user: Annotated[User, Depends(get_current_active_user)]):
     cur = get_conn().cursor()
     uid = current_user.user_id
     date_list = []
-    initialDate = date.today()-timedelta(days=7)
+    initialDate = date.today()-timedelta(days=6)
     calorie_list = []
 
     for i in range(7):
         date_list.append(initialDate+timedelta(days=i))
-    
 
     for i in range(7):
         cur.execute('''SELECT calories FROM daily_calories WHERE user_id=%s AND date = %s''', (uid, date_list[i]))
         calories = cur.fetchone()
         if (calories is None):
-            calorie_list.append(date_list[i].strftime("%A, %m/%d"))
+            calorie_list.append(date_list[i].strftime("%m/%d"))
             calorie_list.append(0)
         else:
-            calorie_list.append(date_list[i].strftime("%A, %m/%d"))
+            calorie_list.append(date_list[i].strftime("%m/%d"))
             calorie_list.append(calories[0])
     get_conn().commit()
     return calorie_list
