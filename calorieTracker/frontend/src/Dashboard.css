@@ -1,6 +1,13 @@
+html, body {
+    margin: 0;
+    min-height: 100%;
+    background-color: rgb(24, 31, 31);
+}
+
 body {
     display: flex;
     justify-content: center;
+    background-color: rgb(24, 31, 31);
 }
 
 .header {
@@ -8,17 +15,29 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100vw;
-    background-color: rgb(0, 53, 0);
-    color: rgb(203, 203, 203);
+    color: rgb(255, 255, 240);
     padding: 1rem 2rem;
+    border-bottom: rgb(0, 159, 151) solid;
+    background-color: rgb(24, 31, 31);
+}
+
+.profile-dropdown {
+    background-color: rgb(0, 159, 151) !important;
 }
 
 .calorieButton {
-    background: rgb(178, 178, 178) !important;
+    background: rgb(0, 159, 151) !important;
     border: none !important;
     border-radius: 25px !important;
-    color: white !important;
-    padding: 10px 25px !important;
+    color: rgb(255, 255, 240) !important;
+    padding: 10% 25%;
     font-size: 50px !important;
+}
+
+.calorieTracker {
+    padding-top: 1%;
+    display: grid;
+    place-items: center;
+    background-color: rgb(24, 31, 31);
 }
 

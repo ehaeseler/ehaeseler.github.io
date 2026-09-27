@@ -39,6 +39,7 @@ function Dashboard({user, isLoading}) {
     const [error, setError] = useState("");
     const [calorieData, setCalorieData] = useState([]);
     const [labels, setLabels] = useState([]);
+    var maxCalories;
 
     const handleShowCalorie = () => setShowCalorie(true);
     const handleCloseCalorie = () => setShowCalorie(false);
@@ -89,6 +90,7 @@ function Dashboard({user, isLoading}) {
     }
 
     async function handleChart() {
+        let maxCalories = 0;
         const token = sessionStorage.getItem("token")
         const res = await fetch ("http://127.0.0.1:8000/graph",
             {
@@ -116,8 +118,12 @@ function Dashboard({user, isLoading}) {
         const calories = [];
 
         for (let i = 1; i < 14; i += 2) {
+            if (maxCalories < data2[i]) {
+                maxCalories = data2[i];
+            }
             calories.push(data2[i]);
         }
+        maxCalories = Math.ceil(maxCalories / 100) * 100
         setCalorieData(calories)
     }
 
@@ -130,8 +136,22 @@ function Dashboard({user, isLoading}) {
         },
         scales: {
             y: { 
-              min: 0,
-              max: 5000
+                min: 0,
+                max: maxCalories,
+                ticks: {
+                    color: 'rgb(225, 225, 240)',
+                },
+                grid: {
+                    color: 'rgb(125, 125, 125)'
+                }
+            },
+            x: {
+                ticks: {
+                    color: 'rgb(225, 225, 240)',
+                },
+                grid: {
+                    color: 'rgb(125, 125, 125)'
+                }
             }
           }
     };
@@ -142,18 +162,20 @@ function Dashboard({user, isLoading}) {
         datasets: [
           {
             data: calorieData,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgb(228, 105, 76)',
+            backgroundColor: 'rgba(228, 105, 76, 0.5)',
+            color: 'rgb(225, 225, 225)'
           },
         ],
-      };
+    };
+
 
 
 
     return (
         <>
             <div className="header">
-                <h1>Welcome {user.full_name}</h1>
+                <h1>Welcome, {user.full_name}</h1>
 
                 <Dropdown>
                     <Dropdown.Toggle variant="success" id="dropdown-basic" className="profile-dropdown" size="lg">
@@ -161,7 +183,7 @@ function Dashboard({user, isLoading}) {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => navigate("/profile")}>Profile</Dropdown.Item>
+                        <Dropdown.Item onClick={() => navigate("/profile")}>Edit Profile</Dropdown.Item>
                         <Dropdown.Item onClick={handleLogout}>Log Out</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
@@ -184,7 +206,7 @@ function Dashboard({user, isLoading}) {
                         <Button variant="primary" onClick={handleCalories}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
-                <div style={{ width: '90%', height: '50vh' }}>
+                <div style={{ width: '90%', height: '70vh' }}>
                     <Line options={options} data={data}></Line>
                 </div>
             </div>
