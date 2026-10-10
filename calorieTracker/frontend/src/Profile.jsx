@@ -33,10 +33,19 @@ function Profile({user, isLoading, setUser}) {
         if (!user && !isLoading) {
             navigate("/login");
         }
+        // if (!user && isLoading) {
+        //     window.location.reload();
+        // }
     }, [user, isLoading]);
 
     if (!user || isLoading) {
-        return null
+        return (
+            <div>
+                <p>Loading...</p>
+                <p>user: {JSON.stringify(user)}</p>
+                <p>isLoading: {JSON.stringify(isLoading)}</p>
+            </div>
+        )
     }
 
     async function handleChangeName() {
@@ -185,78 +194,78 @@ function Profile({user, isLoading, setUser}) {
     return (
         <>  
             <div className="profile">
-                <div className="name">
+                <div className="name" id="fullName">
                     <div className="textButton">
                         <p className="originalName">Name</p>
                         <Button className="changeButton" size="sm" onClick={handleShowName}>Edit</Button>
                     </div>
                 </div>
                 <Modal show={showName} onHide={handleCloseName}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Change Name</Modal.Title>
+                    <Modal.Header closeButton closeVariant="white">
+                        <Modal.Title className="modalTitle">Change Name</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <InputGroup>
                             <InputGroup.Text id="nameInput">Name</InputGroup.Text>
-                            <Form.Control ref={nameRef}></Form.Control>
+                            <Form.Control id="formControl" ref={nameRef} placeholder={user.full_name}></Form.Control>
                         </InputGroup>
                         <p className="nameError">{nameError}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleChangeName}>Save Changes</Button>
+                        <Button className="saveButton" variant="primary" onClick={handleChangeName}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
 
-                <div className="name">
+                <div className="name" id="username">
                     <div className="textButton">
                         <p className="originalName">Username</p>
                         <Button className="changeButton" size="sm" onClick={handleShowUsername}>Edit</Button>
                     </div>
                 </div>
                 <Modal show={showUsername} onHide={handleCloseUsername}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Change Username</Modal.Title>
+                    <Modal.Header closeButton closeVariant="white">
+                        <Modal.Title className="modalTitle">Change Username</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Body className="modalBody">
                         <InputGroup>
-                            <InputGroup.Text id="usernameInput">Username</InputGroup.Text>
-                            <Form.Control ref={usernameRef} placeholder={user.username}></Form.Control>
+                            <InputGroup.Text className="modalInput" id="usernameInput">Username</InputGroup.Text>
+                            <Form.Control id="formControl" ref={usernameRef} placeholder={user.username}></Form.Control>
                         </InputGroup>
                         <p className="userError">{usernameError}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleChangeUsername}>Save Changes</Button>
+                        <Button className="saveButton" variant="primary" onClick={handleChangeUsername}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
 
-                <div className="name">
+                <div className="name" id="password">
                     <div className="textButton">
                         <p className="originalName">Password</p>
                         <Button className="changeButton" size="sm" onClick={handleShowPassword}>Edit</Button>
                     </div>
                 </div>
                 <Modal show={showPassword} onHide={handleClosePassword}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Change Username</Modal.Title>
+                    <Modal.Header closeButton closeVariant="white">
+                        <Modal.Title className="modalTitle">Change Password</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                     <InputGroup>
                         <InputGroup.Text id="passwordInput">Password</InputGroup.Text>
-                        <Form.Control ref={passRef}></Form.Control>
+                        <Form.Control id="formControl" ref={passRef}></Form.Control>
                     </InputGroup>
                     <p className="passwordError">{passwordError}</p>
                     <InputGroup>
                         <InputGroup.Text id="passwordCheckInput">Re-enter Password</InputGroup.Text>
-                        <Form.Control ref={passCheckRef}></Form.Control>
+                        <Form.Control id="formControl" ref={passCheckRef}></Form.Control>
                     </InputGroup>
                     <p className="passwordError">{passCheckError}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleChangePassword}>Save Changes</Button>
+                        <Button className="saveButton" variant="primary" onClick={handleChangePassword}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
 
-                <Button id="ReturnButton" onClick={toDashboard}>Back</Button>
+                <Button id="returnButton" onClick={toDashboard}>Back</Button>
             </div>
         </>
     )

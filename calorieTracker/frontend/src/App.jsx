@@ -24,6 +24,7 @@ function App() {
           const userData = await res.json();
           if (!res.ok) {
             sessionStorage.removeItem("token");
+            setIsLoading(false);
             navigate("/login");
             return;
           }
