@@ -34,6 +34,10 @@ body {
     font-size: 50px !important;
 }
 
+.calorieButton:hover {
+    background-color: rgb(2, 114, 109) !important;
+}
+
 .calorieTracker {
     padding-top: 1%;
     display: grid;
@@ -41,3 +45,38 @@ body {
     background-color: rgb(24, 31, 31);
 }
 
+.dropdown-menu {
+    background-color: rgb(0, 159, 151) !important;
+}
+
+.profile-dropdown:hover {
+    background-color: rgb(2, 114, 109) !important;
+}
+
+#profileButton:hover {
+    background-color: rgb(255, 255, 240) !important;
+}
+
+#logoutButton:hover {
+    background-color: rgb(255, 255, 240) !important;
+}
+
+.dropdown-menu.profileButton {
+    background-color: rgb(0, 255, 240) !important;
+}
+
+#calorieInput {
+    background-color: rgb(255, 255, 240);
+}
+
+#formControl {
+    color: rgb(255, 255, 240);
+}
+
+.modalTitle {
+    color: rgb(255, 255, 240);
+}
+
+.calorieError {
+    color: red;
+}

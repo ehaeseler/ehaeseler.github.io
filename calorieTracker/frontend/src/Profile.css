@@ -13,7 +13,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10rem;
+    padding-top: 10rem;
     background-color: rgb(24, 31, 31);
     color: rgb(255, 255, 240);
 }
@@ -91,10 +91,20 @@ body {
     background-color: rgb(0, 159, 151) !important;
 }
 
+.changeButton:hover {
+    background-color: rgb(2, 114, 109) !important;
+}
+
 #returnButton {
     margin-top: 1rem;
     width: 50%;
     background-color: rgb(0, 159, 151) !important;
+}
+
+#returnButton:hover {
+    margin-top: 1rem;
+    width: 50%;
+    background-color: rgb(2, 114, 109) !important;
 }
 
 #fullName {
@@ -107,4 +117,8 @@ body {
 
 .saveButton {
     background-color: rgb(0, 159, 151) !important;
+}
+
+.saveButton:hover{
+    background-color: rgb(2, 114, 109) !important;
 }

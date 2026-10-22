@@ -1,0 +1,46 @@
+html,body {
+    background-color: rgb(24, 31, 31);
+}
+
+body {
+    background-color: rgb(24, 31, 31);
+    --bs-body-bg: rgb(24, 31, 31);
+    color: rgb(255, 255, 240);
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10rem;
+    background-color: rgb(24, 31, 31);
+    color: rgb(255, 255, 240);
+}
+
+.button {
+    background-color: rgb(0, 159, 151) !important;
+    margin-bottom: 1rem !important;
+}
+
+.button:hover {
+    background-color: rgb(2, 114, 109) !important;
+}
+
+#userInput {
+    background-color: rgb(255, 255, 240);
+}
+
+#passInput {
+    background-color: rgb(255, 255, 240);
+}
+
+#formControl {
+    color: rgb(255, 255, 240);
+}
+
+#userPassError {
+    color: red;
+    margin-bottom: 1rem;
+}
+

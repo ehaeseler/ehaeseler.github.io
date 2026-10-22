@@ -41,7 +41,7 @@ function Dashboard({user, isLoading}) {
     const [labels, setLabels] = useState([]);
     var maxCalories;
 
-    const handleShowCalorie = () => setShowCalorie(true);
+    const handleShowCalorie = () => {setShowCalorie(true); setError("");}
     const handleCloseCalorie = () => setShowCalorie(false);
 
     
@@ -183,8 +183,8 @@ function Dashboard({user, isLoading}) {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => navigate("/profile")}>Edit Profile</Dropdown.Item>
-                        <Dropdown.Item onClick={handleLogout}>Log Out</Dropdown.Item>
+                        <Dropdown.Item id="profileButton" onClick={() => navigate("/profile")}>Edit Profile</Dropdown.Item>
+                        <Dropdown.Item id="logoutButton" onClick={handleLogout}>Log Out</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
@@ -193,17 +193,17 @@ function Dashboard({user, isLoading}) {
                 <Button className="calorieButton" onClick={handleShowCalorie}>Add Calories</Button> 
                 <Modal show={showCalorie} onHide={handleCloseCalorie}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Add Calories</Modal.Title>
+                        <Modal.Title className="modalTitle">Add Calories</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <InputGroup>
                             <InputGroup.Text id="calorieInput">Calories:</InputGroup.Text>
-                            <Form.Control ref={calorieRef}></Form.Control>
+                            <Form.Control id="formControl" ref={calorieRef}></Form.Control>
                         </InputGroup>
                         <p className="calorieError">{error}</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={handleCalories}>Save Changes</Button>
+                        <Button variant="primary" type="submit" onClick={handleCalories}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
                 <div style={{ width: '90%', height: '70vh' }}>

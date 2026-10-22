@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom'
 
 
-import './App.css'
+import './Login.css'
 
 
 
@@ -49,21 +49,23 @@ function Login({onLogin}) {
 
     return (
         <>
-            <InputGroup className="mb-3">
-                <InputGroup.Text id="userInput">Username:</InputGroup.Text>
-                <Form.Control ref={usernameRef}></Form.Control>
-            </InputGroup>
+            <div className="login">
+                <InputGroup className="mb-3">
+                    <InputGroup.Text id="userInput">Username:</InputGroup.Text>
+                    <Form.Control id="formControl" ref={usernameRef}></Form.Control>
+                </InputGroup>
 
-            <InputGroup className="mb-3">
-                <InputGroup.Text id="passInput">Password:</InputGroup.Text>
-                <Form.Control ref={passwordRef}></Form.Control>
-            </InputGroup>
+                <InputGroup className="mb-1">
+                    <InputGroup.Text id="passInput">Password:</InputGroup.Text>
+                    <Form.Control id="formControl" ref={passwordRef}></Form.Control>
+                </InputGroup>
 
-            <p id="userPassError">{error}</p>
+                <p id="userPassError">{error}</p>
 
-            <Button onClick={handleLogin}>Submit</Button>
-            <p>Don't have an account?</p>
-            <Button onClick={handleRegister}>Register</Button>
+                <Button className="button" onClick={handleLogin}>Submit</Button>
+                <p>Don't have an account?</p>
+                <Button className="button" onClick={handleRegister}>Register</Button>
+            </div>
         </>
     )
 }
