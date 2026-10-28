@@ -4,7 +4,7 @@ import Login from "./Login.jsx"
 import Dashboard from "./Dashboard.jsx"
 import Register from "./Register.jsx"
 import Profile from './Profile.jsx'
-import { Routes, Route, Navigate, useNavigate, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 
 function App() {
@@ -36,16 +36,12 @@ function App() {
   }, [])
 
   return(
-
-    <BrowserRouter basename="/calorieTracker">
-      <Routes>
-        <Route path="/" element={<Dashboard user={user}/>}></Route>
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={setUser} isLoading={isLoading}/>}></Route>
-        <Route path="/register" element={user ? <Navigate to="/" /> :<Register onRegister={setUser} isLoading={isLoading}/>}></Route>
-        <Route path="/profile" element={<Profile user={user} isLoading={isLoading} setUser={setUser}/>}></Route>
-      </Routes>
-    </BrowserRouter>
-
+    <Routes>
+      <Route path="/" element={<Dashboard user={user}/>}></Route>
+      <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={setUser} isLoading={isLoading}/>}></Route>
+      <Route path="/register" element={user ? <Navigate to="/" /> :<Register onRegister={setUser} isLoading={isLoading}/>}></Route>
+      <Route path="/profile" element={<Profile user={user} isLoading={isLoading} setUser={setUser}/>}></Route>
+    </Routes>
   )
 }
 
