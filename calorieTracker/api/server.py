@@ -235,8 +235,6 @@ def change_profile(current_user: Annotated[User, Depends(get_current_active_user
             )
        newData = password_hash.hash(newData)
        
-    
-
     try:
         cur.execute(f'''UPDATE user_table SET {field} = %s WHERE user_id = %s''', (newData, uid))
         get_conn().commit()
@@ -274,12 +272,4 @@ def make_graph(current_user: Annotated[User, Depends(get_current_active_user)]):
             calorie_list.append(date_list[i].strftime("%m/%d"))
             calorie_list.append(calories[0])
     get_conn().commit()
-    return calorie_list
- 
-
-
-
-
-
-# Make new jsx file for calorie graph using datetime strftime("%A, %m/%d")
-    
+    return calorie_list    
