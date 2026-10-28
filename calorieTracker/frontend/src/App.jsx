@@ -17,7 +17,7 @@ function App() {
       const userToken = sessionStorage.getItem("token");
   
       if(userToken) {
-        const res = await fetch("http://127.0.0.1:8000/users/me",
+        const res = await fetch("https://ehaeseler-github-io.onrender.com/users/me",
           {
               method: "GET", headers: {"Authorization": `Bearer ${userToken}`}
           });
