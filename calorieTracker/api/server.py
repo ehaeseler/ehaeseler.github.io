@@ -23,7 +23,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["https://ehaeseler-github-io.onrender.com"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
