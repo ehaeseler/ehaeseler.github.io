@@ -22,7 +22,7 @@ function Login({onLogin}) {
         body.append("username", username);
         body.append("password", password);
 
-        const res = await fetch(`http://127.0.0.1:8000/token`,
+        const res = await fetch(`https://ehaeseler-github-io.onrender.com/token`,
         {
             method: "POST", headers: {"Content-Type" : "application/x-www-form-urlencoded"},
             body: body
@@ -34,7 +34,7 @@ function Login({onLogin}) {
         }
         sessionStorage.setItem("token", data.access_token);
 
-        const resp = await fetch("http://127.0.0.1:8000/users/me", {
+        const resp = await fetch("https://ehaeseler-github-io.onrender.com/users/me", {
             method: "GET",
             headers: {"Authorization": `Bearer ${data.access_token}`}
         });

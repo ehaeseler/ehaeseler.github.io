@@ -26,7 +26,7 @@ function Register({onRegister}) {
             setPassCheckError("Password and Password Check must be the same");
             return;
         }
-        const res = await fetch("http://127.0.0.1:8000/register",
+        const res = await fetch("https://ehaeseler-github-io.onrender.com/register",
             {
                 method: "POST", headers: {"Content-Type" : "application/json"},
                 body: JSON.stringify({"username": username, "password": password, "full_name": name})
@@ -63,7 +63,7 @@ function Register({onRegister}) {
             }
             sessionStorage.setItem("token", data.access_token);
 
-            const resp = await fetch("http://127.0.0.1:8000/users/me", {
+            const resp = await fetch("https://ehaeseler-github-io.onrender.com/users/me", {
                 method: "GET",
                 headers: {"Authorization": `Bearer ${data.access_token}`}
             });

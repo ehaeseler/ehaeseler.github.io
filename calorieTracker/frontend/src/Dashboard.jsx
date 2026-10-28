@@ -68,7 +68,7 @@ function Dashboard({user, isLoading}) {
         const calories = calorieRef.current.value;
         const token = sessionStorage.getItem("token")
 
-        const res = await fetch("http://127.0.0.1:8000/calories",
+        const res = await fetch("https://ehaeseler-github-io.onrender.com/calories",
             {
                 method: "POST", headers: {"Content-Type": "application/json", "Authorization" : `Bearer ${token}`},
                 body: JSON.stringify({"calories": parseInt(calories)})
@@ -92,7 +92,7 @@ function Dashboard({user, isLoading}) {
     async function handleChart() {
         let maxCalories = 0;
         const token = sessionStorage.getItem("token")
-        const res = await fetch ("http://127.0.0.1:8000/graph",
+        const res = await fetch ("https://ehaeseler-github-io.onrender.com/graph",
             {
                 method: "GET", headers: {"Content-Type": "application/json", "Authorization" : `Bearer ${token}`}
             }

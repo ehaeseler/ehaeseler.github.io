@@ -56,7 +56,7 @@ function Profile({user, isLoading, setUser}) {
             full_name: newName
         };
 
-        const res = await fetch("http://127.0.0.1:8000/profile",
+        const res = await fetch("https://ehaeseler-github-io.onrender.com/profile",
             {
                 method: "PATCH", headers: {"Content-Type" : "application/json", "Authorization": `Bearer ${token}`},
                 body: JSON.stringify(rawData)
@@ -80,7 +80,7 @@ function Profile({user, isLoading, setUser}) {
             }
             return;
         }
-        const meRes = await fetch("http://127.0.0.1:8000/users/me", {
+        const meRes = await fetch("https://ehaeseler-github-io.onrender.com/users/me", {
             method: "GET",
             headers: { "Authorization": `Bearer ${token}` }
         });
@@ -98,7 +98,7 @@ function Profile({user, isLoading, setUser}) {
             username: newUsername
         };
 
-        const res = await fetch("http://127.0.0.1:8000/profile",
+        const res = await fetch("https://ehaeseler-github-io.onrender.com/profile",
             {
                 method: "PATCH", headers: {"Content-Type" : "application/json", "Authorization": `Bearer ${token}`},
                 body: JSON.stringify(rawData)
@@ -124,7 +124,7 @@ function Profile({user, isLoading, setUser}) {
         }
         const newToken = data.access_token;
         sessionStorage.setItem("token", newToken);
-        const meRes = await fetch("http://127.0.0.1:8000/users/me", {
+        const meRes = await fetch("https://ehaeseler-github-io.onrender.com/users/me", {
             method: "GET",
             headers: { "Authorization": `Bearer ${newToken}` }
         });
@@ -144,7 +144,7 @@ function Profile({user, isLoading, setUser}) {
             password_check: newPassCheck
         };
 
-        const res = await fetch("http://127.0.0.1:8000/profile",
+        const res = await fetch("https://ehaeseler-github-io.onrender.com/profile",
             {
                 method: "PATCH", headers: {"Content-Type" : "application/json", "Authorization": `Bearer ${token}`},
                 body: JSON.stringify(rawData)
@@ -174,7 +174,7 @@ function Profile({user, isLoading, setUser}) {
             }
             return;
         }
-        const meRes = await fetch("http://127.0.0.1:8000/users/me", {
+        const meRes = await fetch("https://ehaeseler-github-io.onrender.com/users/me", {
             method: "GET",
             headers: { "Authorization": `Bearer ${token}` }
         });
