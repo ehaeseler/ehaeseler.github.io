@@ -37,6 +37,7 @@ function App() {
 
   return(
     <Routes>
+      <Route path="*" element={<Navigate to="/" replace />} />
       <Route path="/" element={<Dashboard user={user}/>}></Route>
       <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={setUser} isLoading={isLoading}/>}></Route>
       <Route path="/register" element={user ? <Navigate to="/" /> :<Register onRegister={setUser} isLoading={isLoading}/>}></Route>
