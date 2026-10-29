@@ -78,7 +78,7 @@ function Register({onRegister}) {
             <div className="register">
                 <InputGroup className="mb-3">
                     <InputGroup.Text id="nameInput">Full Name:</InputGroup.Text>
-                    <Form.Control ref={nameRef}></Form.Control>
+                    <Form.Control id="formControl" ref={nameRef}></Form.Control>
                 </InputGroup>
 
                 <p className="error" id="nameError">{nameError}</p>
