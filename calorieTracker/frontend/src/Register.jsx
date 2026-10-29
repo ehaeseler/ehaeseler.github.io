@@ -75,36 +75,38 @@ function Register({onRegister}) {
 
     return (
         <>
-            <InputGroup className="mb-3">
-                <InputGroup.Text id="nameInput">Full Name:</InputGroup.Text>
-                <Form.Control ref={nameRef}></Form.Control>
-            </InputGroup>
+            <div className="register">
+                <InputGroup className="mb-3">
+                    <InputGroup.Text id="nameInput">Full Name:</InputGroup.Text>
+                    <Form.Control ref={nameRef}></Form.Control>
+                </InputGroup>
 
-            <p id="nameError">{nameError}</p>
+                <p className="error" id="nameError">{nameError}</p>
 
-            <InputGroup className="mb-3">
-                <InputGroup.Text id="userInput">Username:</InputGroup.Text>
-                <Form.Control ref={usernameRef}></Form.Control>
-            </InputGroup>
-            
-            <p id="userError">{userError}</p>
+                <InputGroup className="mb-3">
+                    <InputGroup.Text id="userInput">Username:</InputGroup.Text>
+                    <Form.Control id="formControl" ref={usernameRef}></Form.Control>
+                </InputGroup>
+                
+                <p className="error" id="userError">{userError}</p>
 
-            <InputGroup className="mb-3">
-                <InputGroup.Text id="passInput">Password:</InputGroup.Text>
-                <Form.Control ref={passwordRef}></Form.Control>
-            </InputGroup>
+                <InputGroup className="mb-3">
+                    <InputGroup.Text id="passInput">Password:</InputGroup.Text>
+                    <Form.Control id="formControl" ref={passwordRef}></Form.Control>
+                </InputGroup>
 
-            <p id="passError">{passError}</p>
+                <p className="error" id="passError">{passError}</p>
 
-            <InputGroup className="mb-3">
-                <InputGroup.Text id="passCheckInput">Re-enter Password:</InputGroup.Text>
-                <Form.Control ref={passCheckRef}></Form.Control>
-            </InputGroup>
+                <InputGroup className="mb-3">
+                    <InputGroup.Text id="passCheckInput">Re-enter Password:</InputGroup.Text>
+                    <Form.Control id="formControl" ref={passCheckRef}></Form.Control>
+                </InputGroup>
 
-            <p id="passCheckError">{passCheckError}</p>
+                <p className="error" id="passCheckError">{passCheckError}</p>
 
 
-            <Button onClick={handleRegister}>Submit</Button>
+                <Button className="button" onClick={handleRegister}>Submit</Button>
+            </div>
         </>
     )
 }
