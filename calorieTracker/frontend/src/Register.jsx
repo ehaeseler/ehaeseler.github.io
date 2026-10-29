@@ -4,7 +4,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom'
 
-import './App.css'
+import './Register.css'
 function Register({onRegister}) {
     const usernameRef = useRef();
     const passwordRef = useRef();
