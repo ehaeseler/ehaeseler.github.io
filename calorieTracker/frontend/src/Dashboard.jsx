@@ -66,12 +66,13 @@ function Dashboard({user, isLoading}) {
 
     async function handleCalories() {
         const calories = calorieRef.current.value;
-        const token = sessionStorage.getItem("token")
+        const token = sessionStorage.getItem("token");
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         const res = await fetch("https://ehaeseler-github-io.onrender.com/calories",
             {
                 method: "POST", headers: {"Content-Type": "application/json", "Authorization" : `Bearer ${token}`},
-                body: JSON.stringify({"calories": parseInt(calories)})
+                body: JSON.stringify({"calories": parseInt(calories), "timezone": timezone})
             }
         )
         const data = await res.json();

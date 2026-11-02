@@ -8,6 +8,7 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from typing import Annotated
 import jwt
 from jwt.exceptions import InvalidTokenError
@@ -23,7 +24,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ehaeseler.github.io"],
+    allow_origins=["https://ehaeseler.github.io", "http://localhost:5173"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -69,7 +70,7 @@ class UserInDB(User):
     hashed_password: str
 
 class RegisterRequest(BaseModel):
-    full_name: str = Field(min_length=1)
+    full_name: str = Field(min_length=1, max_length=20)
     username: str = Field(min_length=4, max_length=10)
     password: str = Field(min_length=7, max_length=15)
 
@@ -81,6 +82,7 @@ class ChangeProfile(BaseModel):
 
 class FoodData(BaseModel):
     calories: int = Field(gt=0)
+    timezone: str
 
 def verify_password(plain_password, hashed_password):
     return password_hash.verify(plain_password, hashed_password)
@@ -184,8 +186,10 @@ def add_calories(current_user: Annotated[User, Depends(get_current_active_user)]
     cur = get_conn().cursor()
 
     uid = current_user.user_id
-    current_date = date.today()
     calories = food_data.calories
+    timeinfo = food_data.timezone
+    timezone = ZoneInfo(timeinfo)
+    current_date = datetime.now(timezone).date()
     try:
         cur.execute('''INSERT INTO daily_calories(user_id, date, calories) VALUES (%s, %s, %s)
                 ON CONFLICT (user_id, date) DO UPDATE SET calories = daily_calories.calories + EXCLUDED.calories''', (uid, current_date, calories))
